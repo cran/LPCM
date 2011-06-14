@@ -21,7 +21,7 @@ followx<-function(Xi, x0, h, t0, iter, way,  weights, pen=2,  phi =1, lasteigenv
      for (i in iter:1){
       
        center.x <- cov.wt(Xi, wt= kernd(Xi,x,c0[i]*h)*weights)           # local covariance and mean at x
-       mu.x     <- center.x[[2]] 						 # Local center of mass at x (mean shift).
+       mu.x     <- center.x[[2]] 				         # Local center of mass at x (mean shift).
        save.xd[i,]  <- mu.x						  # stores the first point of that branch.
 
        if (i==iter){
@@ -34,9 +34,10 @@ followx<-function(Xi, x0, h, t0, iter, way,  weights, pen=2,  phi =1, lasteigenv
        eigen.cov              <- eigen(center.x[[1]]) 				  # local covariance at x
        eigen.vecd[i,]         <- eigen.cov[[2]][,1]				  # local first eigenvector at x
 
-       rho[i]<-eigen.cov[[1]][2]/eigen.cov[[1]][1]           # computes rho
-       if ((i< iter) && (rho[i] > rho0) && (rho[i+1]<= rho0)){highrhopoints<-rbind(highrhopoints, x)  }
-										 # compares with rho0
+       rho[i]<-eigen.cov[[1]][2]/eigen.cov[[1]][1]                               # computes rho
+       if ((i< iter) && (rho[i] > rho0) && (rho[i+1]<= rho0)){#print(i); print(x)
+                         highrhopoints<-rbind(highrhopoints, x)
+       }                                                                         # compares with rho0
 
        if (i == iter && lasteigenvector[1] !=0){ cos.alt.neu[i]<- sum(lasteigenvector* eigen.vecd[i,]) }
        if (i < iter){ cos.alt.neu[i]<- sum(eigen.vecd[i+1,]* eigen.vecd[i,])}
@@ -90,7 +91,9 @@ followx<-function(Xi, x0, h, t0, iter, way,  weights, pen=2,  phi =1, lasteigenv
       eigen.vecd[i,]         <- eigen.cov[[2]][,1]
 
       rho[i]<-eigen.cov[[1]][2]/eigen.cov[[1]][1]
-      if (i > iter +1 && rho[i] > rho0 && rho[i-1]<= rho0){highrhopoints<-rbind(highrhopoints,x)}
+      if (i > iter +1 && rho[i] > rho0 && rho[i-1]<= rho0){#print(i); print(x)
+              highrhopoints<-rbind(highrhopoints,x)
+      }
       if (i == (1 + iter) && lasteigenvector [1] != 0){ cos.alt.neu[i]<- -sum(lasteigenvector* eigen.vecd[i,])}
       if (i >= (2 + iter)){ cos.alt.neu[i]<- sum(eigen.vecd[i-1,]* eigen.vecd[i,])}
       if (cos.alt.neu[i]<0){ eigen.vecd[i,]<- - eigen.vecd[i,]}

@@ -8,11 +8,11 @@
 }
 \usage{
 \method{plot}{lpc}(x, type, unscale = TRUE, lwd = 1, datcol = "grey60", 
-    datpch = 21, masscol = 2, masspch = 15, curvecol = 1, splinecol = 3, 
-    projectcol = 4, startcol = 1:3,  startpch=NULL,...)  
+    datpch = 21, masscol = NULL, masspch = 15, curvecol = 1, splinecol = 3, 
+    projectcol = 4, startcol = NULL,  startpch=NULL,...)  
 \method{plot}{lpc.spline}(x, type, unscale = TRUE, lwd = 1, datcol = "grey60", 
-    datpch = 21, masscol = 2, masspch = 15, curvecol = 1, splinecol = 3, 
-    projectcol = 4, startcol = 1:3,  startpch=NULL,...)
+    datpch = 21, masscol = NULL, masspch = 15, curvecol = 1, splinecol = 3, 
+    projectcol = 4, startcol = NULL,  startpch=NULL,...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -22,7 +22,7 @@
   \item{lwd}{width of curves.}
   \item{datcol}{color of data points.}
   \item{datpch}{plotting symbol for data points.}
-  \item{masscol}{color of centers of mass.}
+  \item{masscol}{color of centers of mass (see below).  }
   \item{masspch}{plotting symbol for centers of mass.}
   \item{curvecol}{color of the curve interpolating the local centers of mass (this is the "local principal curve"!).}
   \item{splinecol}{color of the spline representation of the local principal curve.} 
@@ -37,8 +37,17 @@ of starting points.}
 % Plots a local principal curve  
 %}
 \value{
- A 2D plot, 3D plot, or a pairs plot (depending on the data dimension \eqn{d}.).
+A 2D plot, 3D plot, or a pairs plot (depending on the data dimension \eqn{d}.).
 
+The most flexible plotting option is \code{masscol}. Depending on the
+length of the specified vector, this will be interpreted differently. If
+a scalar is provided, the corresponding color will be given to all centers of
+mass. If the length of the vector is larger than 1, then this option
+will assign different colours to  different depths, or different branch
+numbers, or to individual data points, depending on the length. The
+default setting is assigning colours according to depth, in the order
+red, blue, black. 
+ 
 With increasing dimension \eqn{d}, less plotting options tend to be supported. The nicest plots are obtained  for \eqn{d=2} and \eqn{d=3}.
  }
 

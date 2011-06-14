@@ -11,7 +11,7 @@ Local principal curve methods
    including simple tools for data compression (projection), bandwidth
    selection, and measuring goodness-of-fit.
 
-   This packages implements the techniques introduced in Einbeck, Tutz
+   This package implements the techniques introduced in Einbeck, Tutz
    & Evers (2005), and successive related papers.
 
    The main functions to be called by the user are
@@ -27,9 +27,12 @@ Local principal curve methods
    \item \code{\link{lpc.self.coverage}} for bandwidth selection;
    \item the generic \code{plot} and \code{print} functions for objects
    of class \code{lpc} and \code{lpc.spline}. 
-   }
-This package also contains some (rather experimental) code for density
-mode detection and mean shift clustering, see \code{\link{ms}}.
+ }
+ 
+This package also contains some  code for density
+mode detection and  mean shift clustering (as well as bandwidth
+selection in this context), which implements the methods presented in
+Einbeck (2011). See the help file for \code{\link{ms}}.
 
 A second R package which will implement the extension of local principal
 curves to local principal surfaces and manifolds, as proposed in
@@ -56,6 +59,10 @@ Einbeck, J., Tutz, G., & Evers, L. (2005), Local principal curves, Statistics an
 
 Einbeck, J., Evers, L., & Powell, B. (2010): Data compression and regression through local principal curves and surfaces, International Journal of Neural Systems, 
 20, 177-192.
+
+Einbeck, J. (2011): Bandwidth selection for nonparametric unsupervised
+learning techniques -- a unified approach via self-coverage. Journal of
+Pattern Recognition Research, to appear.
 }
 \keyword{smooth}
 \keyword{multivariate}

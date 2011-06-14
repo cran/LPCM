@@ -33,9 +33,8 @@ followx(Xi, x0, h, t0, iter, way, weights, pen = 2, phi = 1,
   \item{way}{
 %%     ~~Describe \code{way} here~~
 }
-\item{weights}{
-
-  }
+  \item{weights}{
+}
   \item{pen}{
 %%     ~~Describe \code{pen} here~~
 }
@@ -48,7 +47,7 @@ followx(Xi, x0, h, t0, iter, way, weights, pen = 2, phi = 1,
   \item{rho0}{
 %%     ~~Describe \code{rho0} here~~
 }
- \item{boundary}{
+  \item{boundary}{
 %%     ~~Describe \code{plotlpc} here~~
 }
   \item{convergence.at}{

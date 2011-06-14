@@ -20,17 +20,17 @@ coverage.raw(X, vec, tau, weights=1, plot.type="p", print=FALSE,
       label=NULL,...)
 
 coverage(X, vec, taumin=0.02, taumax, gridsize=25, weights=1,
-      plot.type="o", print=TRUE,...)
+      plot.type="o", print=FALSE,...)
 
 lpc.coverage(object, taumin=0.02, taumax, gridsize=25, quick=TRUE,
-      plot.type="o", print=TRUE, ...)
+      plot.type="o", print=FALSE, ...)
 
 lpc.self.coverage(X,  taumin=0.02, taumax=0.5,   gridsize=25, x0, mult=1, 
      way = "two", scaled=TRUE,  weights=1, pen=2, depth=1,
      control=lpc.control(boundary=0, cross=FALSE),   quick=TRUE,
-     plot.type="o", print=TRUE, ... )
+     plot.type="o", print=FALSE, ... )
 
-select.self.coverage(self, sens=0.02, from, plot.type="o", auto=FALSE)
+select.self.coverage(self,  smin, plot.type="o", plot.segments=NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -58,14 +58,15 @@ select.self.coverage(self, sens=0.02, from, plot.type="o", auto=FALSE)
 }
 \item{self}{An object of class \code{self}, or a matrix with two colums
      providing a self-coverage curve.} 
-   \item{sens}{Sensitivity parameter: only bandwidths corresponding to
-     curvature values of the self-coverage curve, which are  less than the negative value of \code{sens}, are selected.}
- \item{from}{Minimum coverage for bandwidth selection. Default: 1/3 for
+ \item{smin}{Minimum coverage for bandwidth selection. Default: 1/3 for
    clustering, 2/3 for principal curves.}
- \item{auto}{Unimplemented. If \code{TRUE}, the sensitivity is decreased
-   until a bandwidth is selected.}
 \item{plot.type}{If set to 0, no plotted output is given. Otherwise,
-  an appropriate plot is provided, using the plotting type as specified. }
+  an appropriate plot is provided, using the plotting type as
+  specified. }
+\item{plot.segments}{A list with default \code{list(lty=c(1,2,3),
+    lwd=c(2,1,1),lcol=c(3,3,3))} which specifies how (and how many)
+  bandwidth candidates, in order of decreasing negative second derivative of
+  self-coverage, are to be highlighted.}
 \item{print}{If TRUE, coverage values are printed on the screen as soon as
   computed. This is quite helpful especially if \code{gridsize} is large.} 
 \item{x0, way, scaled, pen, mult, depth, control}{LPC parameters as outlined in
@@ -85,8 +86,12 @@ select.self.coverage(self, sens=0.02, from, plot.type="o", auto=FALSE)
 } 
 
 \details{
-See Einbeck, Tutz, and Evers (2005). This paper uses `quick' coverage curves.
 
+The function \code{coverage.raw} computes the coverage, i.e. the
+proportion of data points lying inside a circle or band with radius
+\eqn{\tau}{tau}, for a fixed value \code{tau}.  The whole coverage curve
+\eqn{C(\tau)}{C(tau)} is constructed through function \code{coverage}.  
+  
 Functions \code{coverage.raw} and \code{coverage} can be used for any
 object fitted by an unsupervised learning technique (for instance, HS principal curves, or even clustering
 algorithms), while the functions prefixing with \code{lpc.} can only be
@@ -96,13 +101,26 @@ than a data matrix.
 
 Function \code{select.self.coverage} is called by
 \code{lpc.self.coverage}. It extracts suitable bandwidths from the
-self-coverage curve, and produces a plot. The function can be called
-directly by the user if the sensitivity \code{sens} or the minimum
-coverage \code{from} are to be modified. 
+self-coverage curve, and produces a plot. The function can also be called
+directly by the user (for instance, if the graphical output is to be reproduced, or if
+the minimum coverage \code{smin} is to be modified). The component
+\code{$select}  contains the selected candidate bandwidths, in the order
+of strength of evidence provided by the self-coverage criterion (the
+best bandwidth comes first, etc.). A plot is produced as a by-product,
+which symbolizes the best bandwidth by a thick solid line, the
+second-best by a dashed line, and the third-best by a dotted line. See
+Einbeck (2011) for details.
+
+Note that the original publication by Einbeck, Tutz, and Evers (2005) uses `quick' coverage curves.
+
 }
 
 \references{
 Einbeck, J.,  Tutz, G.,  & Evers, L. (2005). Local principal curves. Statistics and Computing 15, 301-313.
+
+Einbeck, J. (2011). Bandwidth selection for mean-shift based
+unsupervised learning techniques: a unified approach via
+self-coverage. Journal of Pattern Recognition Research, to appear. 
 }
 
 \author{
@@ -117,9 +135,11 @@ J. Einbeck
 
 \examples{
 data(gvessel)
-gvessel.lpc <- lpc(gvessel[,c(2,4,5)], h=0.11,  x0=c(35, 1870, 6.3))
+gvessel.self <-lpc.self.coverage(gvessel[,c(2,4,5)], x0=c(35, 1870,
+6.3), print=FALSE, plot.type=0)
+h <- select.self.coverage(gvessel.self)$select
+gvessel.lpc <- lpc(gvessel[,c(2,4,5)], h=h[1],  x0=c(35, 1870, 6.3))
 lpc.coverage(gvessel.lpc, gridsize=10, print=FALSE)
-lpc.self.coverage(gvessel[,c(2,4,5)], x0=c(35, 1870, 6.3), print=FALSE)
 
 data(calspeedflow)
 fitms <- ms(calspeedflow[,3:4], h=0.1)

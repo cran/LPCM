@@ -2,10 +2,12 @@
 \Rdversion{1.1}
 \alias{kern}
 \alias{kernd}
+\alias{kdex}
 \alias{vecdist}
 \alias{mindist}
 \alias{distancevector}
 \alias{enorm}
+
 
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
@@ -16,6 +18,7 @@ Auxilary  kernel and distance functions.}
 \usage{
 kern(y, x = 0, h = 1)
 kernd(X, x, h)
+kdex(X, x, h)
 distancevector(X, y, d = "euclid", na.rm = TRUE)
 vecdist(X,Y)
 mindist(X,y)
@@ -33,7 +36,9 @@ enorm(x)
 }
 
 \details{
-\code{kern} specifies the base kernel (by default Gaussian) used in \code{lpc} ; \code{kernd} is the corresponding multivariate product kernel.
+\code{kern} specifies the base kernel (by default Gaussian) used in
+\code{lpc} ; \code{kernd} is the corresponding multivariate product
+kernel.  \code{kdex} is a pointwise multivariate kernel density estimator.
   
 \code{distancevector} makes use of function \code{vdisseuclid} from \R package \pkg{hopach} (but that package does not need to be loaded).
 }

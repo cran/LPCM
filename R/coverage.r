@@ -39,7 +39,7 @@ coverage.raw <-function(X, vec, tau, weights=1, plot.type="p", print=FALSE, labe
 
 
 
-coverage<-function(X, vec,  taumin=0.02, taumax,  gridsize=25, weights=1, plot.type="o", print=TRUE,...){
+coverage<-function(X, vec,  taumin=0.02, taumax,  gridsize=25, weights=1, plot.type="o", print=FALSE,...){
   if (missing(taumax)){
   m <-mean(X)
   Xm <- sweep(X, 1, m, "-")
@@ -60,7 +60,7 @@ coverage<-function(X, vec,  taumin=0.02, taumax,  gridsize=25, weights=1, plot.t
 }
 
 
-lpc.coverage<-function(object, taumin=0.02, taumax, gridsize=25,  quick=TRUE, plot.type="o", print=TRUE, ...){
+lpc.coverage<-function(object, taumin=0.02, taumax, gridsize=25,  quick=TRUE, plot.type="o", print=FALSE, ...){
  
  if (class(object)=="lpc"){
    X <-object$data
@@ -109,7 +109,7 @@ lpc.self.coverage <-
 function (X, taumin = 0.02, taumax = 0.5, gridsize = 25, x0, 
     mult = 1, way = "two", scaled = TRUE, weights = 1, pen = 2, 
     depth = 1, control = lpc.control(boundary = 0, cross = FALSE), 
-    quick = TRUE, plot.type = "o", print = TRUE, ...) 
+    quick = TRUE, plot.type = "o", print = FALSE, ...) 
 {
     if (class(X) %in% c("lpc", "lpc.spline")) {
         stop("Invalid data matrix.")
@@ -154,8 +154,8 @@ function (X, taumin = 0.02, taumax = 0.5, gridsize = 25, x0,
         cover[i, ] <- as.numeric(coverage.raw(fit$data, Pm[[i]], 
             new.h0, weights, plot.type = 0, print = print)[1:2])
     }
-    select <- select.self.coverage(self = cover, sens = 0.02, 
-        from = 2/3, plot.type = plot.type, auto = FALSE)
+    select <- select.self.coverage(self = cover,  
+        smin = 2/3, plot.type = plot.type)
     result <- list(self.coverage.curve = cover, select = select, 
         type = "lpc")
     class(result) <- "self"
@@ -164,7 +164,7 @@ function (X, taumin = 0.02, taumax = 0.5, gridsize = 25, x0,
 
 
 select.self.coverage <-
-function (self, sens = 0.02, from, plot.type = "o", auto = FALSE) 
+function (self,  smin, plot.type = "o", plot.segments=NULL) 
 {
     if (class(self) == "self") {
         cover <- self$self.coverage.curve
@@ -172,33 +172,57 @@ function (self, sens = 0.02, from, plot.type = "o", auto = FALSE)
     else {
         cover <- self
     }
-    if (missing(from)) {
+    if (missing(smin)) {
         if (class(self) == "self") {
-            from <- switch(self$type, lpc = 2/3, ms = 1/3)
+            smin <- switch(self$type, lpc = 2/3, ms = 1/3)
         }
-        else stop("Please specify `from' argument.")
+        else stop("Please specify `smin' argument.")
     }
     n <- dim(cover)[1]
     diff1 <- diff2 <- rep(0, n)
     diff1[2:n] <- cover[2:n, 2] - cover[1:(n - 1), 2]
     diff2[2:(n - 1)] <- diff1[3:n] - diff1[2:(n - 1)]
     select <- select.coverage <- select.2diff <- NULL
+       
     if (plot.type != 0) {
         plot(cover, type = plot.type, xlab = "h", ylab = "S(h)", 
             ylim = c(0, 1))
     }
     for (i in (3:(n - 1))) {
-        if (diff2[i] < -sens && cover[i, 2] > max(from, cover[1:(i - 
+        if (diff2[i] < 0 && cover[i, 2] > max(smin, cover[1:(i - 
             1), 2])) {
             select <- c(select, cover[i, 1])
             select.coverage <- c(select.coverage, cover[i,2])
             select.2diff <- c(select.2diff, diff2[i])
-            if (plot.type != 0) {
-                segments(cover[i, 1], 0, cover[i, 1], cover[i, 
-                  2], col = 3, lty = 1)
-            }
+            #if (plot.type != 0) {
+            #    segments(cover[i, 1], 0, cover[i, 1], cover[i, 
+            #      2], col = scol[i], lty = slty[i], lwd=slwd[i])
+            #}
         }
     }
-    return(list("select"=select, "select.coverage"=select.coverage, "select.2diff"=select.2diff))
+             
+    selected <-select[order(select.2diff)]
+    covered<- select.coverage[order(select.2diff)]          
+    
+    if (plot.type != 0) {
+      d<-length(selected)
+      slty <- slwd <-scol<-rep(0,d)
+      if (is.null(plot.segments)){
+         slty[1:3]<- c(1,2,3)
+         slwd[1:3] <-c(2,1,1)
+         scol[1:3] <- c(3,3,3)
+      } else {
+          r<-max(length(plot.segments$lty), length(plot.segments$lwd), length(plot.segments$col))
+            slty[1:r] <- slwd[1:r] <-scol[1:r]<-1
+            if (length(plot.segments$lty)>0){ slty[1:length(plot.segments$lty)]<- plot.segments$lty}
+             if (length(plot.segments$lwd)>0){slwd[1:length(plot.segments$lwd)]<- plot.segments$lwd}
+            if (length(plot.segments$col)>0){ scol[1:length(plot.segments$col)]<- plot.segments$col}
+       }          
+      for (j in 1:d){
+           segments(selected[j], 0, selected[j], covered[j], col = scol[j], lty = slty[j], lwd=slwd[j])
+         }
+      }         
+             
+    return(list("select"=selected, "select.coverage"=covered, "select.2diff"=select.2diff[order(select.2diff)]))
 }
 

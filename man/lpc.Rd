@@ -15,7 +15,7 @@ lpc(X, h, t0 = mean(h),  x0,  mult = 1, way = "two",  scaled = TRUE,
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{X}{
-data matrix with \eqn{N} lines (observations) and \eqn{d} columns (variables). Note that \eqn{d>2} restricts \code{depth} to 1.
+data matrix with \eqn{N} rows (observations) and \eqn{d} columns (variables). 
 }
   \item{h}{
 bandwidth. May be either specified as a single number, then the same bandwidth is used in
@@ -59,10 +59,16 @@ the Notes section below).
  penalization is switched off.
 }
   \item{depth}{
-maximum depth of branches (phimax in [2]), restricted to the values 1,2 or 3, where 2 and 3 are only allowed for \eqn{d=2}.
+maximum depth of branches (\eqn{\phi_{max}}{phi_max} in [2]),
+    restricted to the values 1,2 or 3  (The original LPC branch has
+    depth 1.  If, along this curve, a point features a high  second local
+    PC, this launches a new starting point, and the resulting branch has
+    depth 2.   If, along this branch, a point features a high second local
+    PC, this launches a new starting point, and the resulting branch has
+    depth 3. ) 
    }
 \item{control}{
-Additional parameters steering partcularly the boundary and convergence
+Additional parameters steering particularly the boundary and convergence
  behavior of the fitted curve. See \code{\link{lpc.control}}.
 }
 }
@@ -125,6 +131,9 @@ function, i.e.
 
 \code{lpc(sweep(data, 2,sd(data), "/"),h, t0, ..., scaled=FALSE, ...)}.
 
+
+
+
 }
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
@@ -146,9 +155,18 @@ data(gaia)
 s <- sample(nrow(gaia),200)
 gaia.pc <-  princomp(gaia[s,5:20])
 lpc3 <- lpc(gaia.pc$scores[,c(2,1,3)],scaled=FALSE)
-plot(lpc3,curvecol=2)
+plot(lpc3, curvecol=2, type=c("curve","mass"))
 
-
+# Simulated letter 'E' with branched LPC
+ex<- c(rep(0,40), seq(0,1,length=20), seq(0,1,length=20), seq(0,1,length=20))
+ey<- c(seq(0,2,length=40), rep(0,20), rep(1,20), rep(2,20))
+sex<-rnorm(100,0,0.01); sey<-rnorm(100,0,0.01)
+eex<-rnorm(100,0,0.1);  eey<-rnorm(100,0,0.1)
+ex1<-ex+sex; ey1<-ey+sey
+ex2<-ex+eex; ey2<-ey+eey
+e1<-cbind(ex1,ey1); e2<-cbind(ex2,ey2)
+lpc.e1 <- lpc(e1, h= c(0.1,0.1),  depth=2, scaled=FALSE)
+plot(lpc.e1, type=c("curve","mass", "start"))
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

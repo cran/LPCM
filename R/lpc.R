@@ -28,10 +28,10 @@ lpc <- function(X,h, t0=mean(h),  x0,   mult=1, way = "two", scaled=TRUE,  weigh
    } 
   if (d==1){
       stop("Data set needs to consist of at least two variables!")
-  } else if (d > 2 && depth > 1){
-      cat("Dimension of data set enforces depth=1! \n")
-      depth <- 1
-    }
+  } #else if (d > 2 && depth > 1){            # removed 05/05/11
+    #  cat("Dimension of data set enforces depth=1! \n")
+    #  depth <- 1
+    #}
   if (!missing(x0)){
       x0 <- matrix(x0, ncol=d, byrow=TRUE)
       if (scaled){ x0 <- sweep(x0, 2, s1, "/") } # scales the starting point just as the scaled data
@@ -41,53 +41,54 @@ lpc <- function(X,h, t0=mean(h),  x0,   mult=1, way = "two", scaled=TRUE,  weigh
        x0 <- matrix(Xi[n,], length(n),d)# corrected 16/10          
   }
 
-   if (depth>1){
-       kde2x <-   function(X, x, h){
-          l<-dim(X)[1]
-          1/l*sum(kern(X[,1],x[1],h[1])*kern(X[,2],x[2],h[2]))
-       }
-   }
-   
+ 
+  gapsize <- 1.5 # Note: In the original paper, this was set to 2, in order to avoid higher-depth branches to run back into the main branch. 
+                 # This  effect is now partly achieved through "jweights", see below.
+  
   for (j in 1:mult){
     
      xo           <- x0[j,]                       # defines appropraite starting point for the jth curve
-     X1[j,]       <- xo                           # adds starting point to list
+     X1[j,]       <- xo                           # adds starting point to list  
      curve0       <-  followx(Xi, xo, h, t0, iter, way, weights, pen, phi =1, 0,rho0,  boundary, convergence.at,  cross ) # computes LPC of depth 1
      saveall      <- rbind(saveall,curve0[[1]])	  # stores LPC
      l            <- dim(curve0[[5]])[1]	  # number of candidates for junctions
      Lambda       <- rbind(Lambda, cbind(curve0[[6]], countb,1,1,j))
      countb       <- countb + 1
      dimnames(Lambda)[[2]]<- c("lambda", "branch", "depth", "order", "init")
-
+     
      if (depth >1 && l>=1 ){							  # constructs branches of depth 2.
 
        for (s in 1:l){
 
-          x          <- curve0[[5]][s,]							  # candidates for junctions on initial curve.
+          x          <- curve0[[5]][s,]				        # candidates for junctions on initial curve.
           center.x   <- cov.wt(Xi, wt= kernd(Xi,x,h)*weights)           # computes local covariance and mean at x
           eigen.cov  <- eigen(center.x[[1]])  				# eigenvalues and eigenvec's of local cov matrix
           eigen.vecd <- eigen.cov[[2]][,2]				# second local eigenvector
-          new.x      <- center.x[[2]]+ 2*t0 * eigen.vecd 		# double stepsize to escape from initial curve
-
-          if (kde2x(Xi,new.x, h) >= thresh){ 				# Pruning
-             X2     <- rbind(X2, t(new.x))				# adds new starting point to list
+          c.x        <- center.x[[2]]                                   # local center of mass around x
+          new.x      <- c.x+ gapsize*t0 * eigen.vecd 		# double stepsize to escape from initial curve 
+          #print( kdex(Xi,new.x, h))
+          if (kdex(Xi,new.x, h) >= thresh){ 				# Pruning
+             X2     <- rbind(X2, t(new.x))				# adds new starting point to list          
              x      <- new.x
-              curve1 <- followx(Xi, x, h, t0, iter, way ="one", weights, pen,  phi=2, lasteigenvector= eigen.vecd, rho0, boundary,convergence.at,  cross)
+             jweights<-  1-kernd(Xi, c.x, h)/ kernd(c.x,c.x,h)
+             curve1 <- followx(Xi, x, h, t0, iter, way ="one", weights*jweights, pen,  phi=2, lasteigenvector= eigen.vecd, rho0, boundary,convergence.at,  cross)
              saveall<- rbind(saveall, curve1[[1]])    # stores LPC
              S2     <- rbind(S2,curve1[[5]])          # stores candidates for further junctions
              Lambda <- rbind(Lambda, cbind(curve1[[6]], countb, 2, 2,j))
              countb <- countb + 1
           }
-          new.x <- center.x[[2]]- 2*t0 * eigen.vecd 		# go in opposite direction
-          if (kde2x(Xi,new.x, h) >= thresh){				  # Pruning
+          new.x <- c.x- gapsize*t0 * eigen.vecd 		# go in opposite direction
+           # print( kdex(Xi,new.x, h))      
+          if (kdex(Xi,new.x, h) >= thresh){				# Pruning
              X2     <- rbind(X2, t(new.x))
              x      <- new.x
-             curve1 <- followx(Xi, x, h, t0, iter, way="back", weights, pen, phi=2, lasteigenvector=-eigen.vecd, rho0,boundary, convergence.at,  cross)
+             jweights<-  1-kernd(Xi, c.x, h)/ kernd(c.x,c.x,h)
+             curve1 <- followx(Xi, x, h, t0, iter, way="back", weights*jweights, pen, phi=2, lasteigenvector=-eigen.vecd, rho0,boundary, convergence.at,  cross)
              saveall<- rbind(saveall, curve1[[1]])
              S2     <- rbind(S2, curve1[[5]])
              Lambda <- rbind(Lambda, cbind(curve1[[6]], countb, 2,2,j))
              countb <- countb + 1     
-          } # end if kde2x.....
+          } # end if kdex.....
       } # end for (s)
      }# end if (depth)
 
@@ -99,37 +100,43 @@ lpc <- function(X,h, t0=mean(h),  x0,   mult=1, way = "two", scaled=TRUE,  weigh
             center.x  <- cov.wt(Xi, wt= kernd(Xi,x,h)*weights)
             eigen.cov <- eigen(center.x[[1]])
             eigen.vecd<- eigen.cov[[2]][,2]
-            new.x     <- center.x[[2]]+ 2*t0 * eigen.vecd
-            if (kde2x(Xi,new.x, h)  >= thresh){
+            c.x        <- center.x[[2]]   
+            new.x     <- c.x+ gapsize*t0 * eigen.vecd
+             # print( kdex(Xi,new.x, h))
+            if (kdex(Xi,new.x, h)  >= thresh){
                   X3      <- rbind(X3, t(new.x))
                   x       <- new.x
-                   curve1  <- followx(Xi, x , h, t0, iter, way ="one", weights, pen, phi=3, lasteigenvector= eigen.vecd, rho0, boundary, convergence.at, cross)
+                  jweights<-  1-kernd(Xi, c.x, h)/ kernd(c.x,c.x,h)
+                  curve1  <- followx(Xi, x , h, t0, iter, way ="one", weights*jweights, pen, phi=3, lasteigenvector= eigen.vecd, rho0, boundary, convergence.at, cross)
                   saveall <- rbind(saveall, curve1[[1]])
                   S3      <- rbind(S3,curve1[[5]])
                   Lambda <- rbind(Lambda, cbind(curve1[[6]], countb, 3,2,j))
                   countb <- countb + 1 
                 }
-            new.x <- center.x[[2]]- 2*t0* eigen.vecd
-            if (kde2x(Xi,new.x, h)   >= thresh){
+            new.x <- c.x- gapsize*t0* eigen.vecd
+             # print( kdex(Xi,new.x, h) )       
+            if (kdex(Xi,new.x, h)   >= thresh){
                   X3     <- rbind(X3, t(new.x))
                   x      <- new.x
-                 curve1 <- followx(Xi, x, h, t0, iter, way="back", weights, pen, phi=3, lasteigenvector=-eigen.vecd, rho0, boundary, convergence.at, cross)
+                  jweights<-  1-kernd(Xi, c.x, h)/ kernd(c.x,c.x,h)
+                  curve1 <- followx(Xi, x, h, t0, iter, way="back", weights*jweights, pen, phi=3, lasteigenvector=-eigen.vecd, rho0, boundary, convergence.at, cross)
                   saveall<- rbind(saveall, curve1[[1]])
                   S3     <- rbind(S3,curve1[[5]])
                   Lambda <- rbind(Lambda, cbind(curve1[[6]], countb, 3,2,j))
                   countb <- countb + 1
-            } # end if kde2x....
+            } # end if kdex....
          } # end for (s)
      } # end if (depth)
   } # end for (j)
-  if (d==2){
+
+   # if (d==2){
       starting.points <- rbind(X1,X2,X3) 
       dimnames(starting.points)<-list(c(rep(1, dim(X1)[1]), rep(2, dim(X2)[1]), rep(3, dim(X3)[1]) ), NULL)
-      #dimnames(starting.points)[[1]]<-c(rep(1, dim(X1)[1]), rep(2, dim(X2)[1]), rep(3, dim(X3)[1]) )
-  } else {
-      starting.points <- as.matrix(X1)
-      dimnames(starting.points)<-list(c(rep(1, dim(X1)[1])), NULL)
-  }
+   # }
+   # else {    # removed 05/05/11
+   #   starting.points <- as.matrix(X1)
+   #   dimnames(starting.points)<-list(c(rep(1, dim(X1)[1])), NULL)
+   #}
 
 
   fit<-  c(LPC=list(saveall),

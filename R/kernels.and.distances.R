@@ -71,6 +71,7 @@ kern <- function(y, x = 0, h = 1){
 
 # Multivariate kernel 
 kernd <- function(X,x,h){
+   if (!is.matrix(X)){ X<- matrix(x, nrow=1)}
    d<-length(x)
    k<-1
    for (j in 1:d){k<- k* kern(X[,j],x[j],h[j])}
@@ -81,3 +82,10 @@ kernd <- function(X,x,h){
 enorm <- function (x){
          sum(x^2)
      }
+
+# Multivariate kernel density estimator
+
+kdex <-  function(X, x, h){
+          n<-dim(X)[1]
+          1/n*sum(kernd(X,x,h))
+        }

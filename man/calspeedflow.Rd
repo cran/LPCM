@@ -14,8 +14,8 @@ A `fundamental diagram' with observations of speed and flow recorded from 9th of
   \describe{
     \item{\code{Date}}{a factor with levels \code{07/09/2007}... \code{07/10/2007}.}
     \item{\code{Timestamp}}{a factor with a timestamps in intervals of five minutes.}
-    \item{\code{Lane5Flow}}{a numeric vector of vehicle speed in miles per hour.}
-    \item{\code{Lane5Speed}}{a numeric vector of vehicle flow in vehicles per 5 minutes.}
+    \item{\code{Lane5Flow}}{a numeric vector of vehicle flow in vehicles per 5 minutes.}
+    \item{\code{Lane5Speed}}{a numeric vector of vehicle speed in miles per hour.}
   }
 }
 %\details{
@@ -25,7 +25,7 @@ A `fundamental diagram' with observations of speed and flow recorded from 9th of
 Retrieved from PeMS.
 }
 \references{
-Einbeck, J.,  and Dwyer, J. (2010). Using principal curves to identify different traffic patterns on freeways. Transportmetrica, to appear.
+Einbeck, J.,  and Dwyer, J. (2011). Using principal curves to analyze traffic patterns on freeways. Transportmetrica 7, 229-246.
 }
 \examples{
 data(calspeedflow)

@@ -26,7 +26,9 @@ lpc.project(object, newdata, ...)
 \item{closest.or.pi}{Projection index of projected point(s) (in terms of the original LPC parametrization). }
 \item{closest.coords}{Coordinates of projected data point(s)}
 \item{closest.dist}{Euclidean distance between data point(s) and their projected counterpart(s).} 
-\item{closest.branch}{ID of branch onto which the data point was projected (the IDs are allocated in the output of function \code{lpc}).}
+\item{closest.branch}{ID of branch onto which the data point was
+  projected (the IDs get allocated in the  output component
+  \code{$Parametrization} of function \code{lpc}).}
 }
 
 \references{

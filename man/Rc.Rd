@@ -5,10 +5,12 @@
 
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Goodness-of-fit for principal curves
+Goodness-of-fit for principal objects
 }
 \description{
-These function compute the goodness-of-fit criterion \eqn{R_C}{R_c} proposed in Einbeck, Tutz, and Evers (2005).
+These functions compute the goodness-of-fit criterion \eqn{R_C}{R_c}
+proposed in Einbeck, Tutz, and Evers (2005), and extended beyond the
+scope of principal curves in Einbeck (2011).
 }
 \usage{
 Rc(data,  closest.coords, type="curve")
@@ -19,7 +21,8 @@ lpc.Rc(object)
   \item{data}{A data matrix.}
   \item{object}{An object of class \code{lpc} or \code{lpc.spline}.}
 \item{closest.coords}{A matrix of coordinates of the projected data.}
-\item{type}{Experimental option, see below. }
+\item{type}{For principal curves, don't modify. For principal points,
+  set "points". }
 }
 
 \details{
@@ -29,9 +32,9 @@ quantity can be interpreted similar to the coeffient of determination in
 regression analysis: Values close to 1 indicate a good fit, while values
 close to 0 indicate a `bad' fit (corresponding to linear PCA).
 
-In principle, function \code{Rc} can also be used for assessing
-goodness-of-fit of alternative principal curve algorithms provided that
-the the coordinates (\code{closest.coords}) of the projected data are
+In principle, function \code{Rc} can be used for assessing
+goodness-of-fit of any principal curve algorithm provided that
+the coordinates (\code{closest.coords}) of the projected data are
 available (For instance, for HS principal curves fitted via
 \code{princurve}, this information is contained in component \code{$s},
 and for LPCs this information is given in component \code{$closest.coords} of the
@@ -60,7 +63,12 @@ the curve fitting).
 }
 
 \references{
-Einbeck, Tutz, and Evers (2005). Local principal curves. Statistics and Computing 15, 301-313.
+Einbeck, Tutz, and Evers (2005). Local principal curves. Statistics and
+Computing 15, 301-313.
+
+Einbeck (2011).  Bandwidth selection for nonparametric unsupervised
+learning techniques -- a unified approach via self-coverage. Journal of
+Pattern Recognition Research, to appear.
 }
 
 \author{

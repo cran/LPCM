@@ -20,27 +20,26 @@ lpc.control(iter =100, boundary = 0.005, convergence.at =0.00001,
 Maximum number of iterations on either side of the starting point within each branch.
 }
   \item{boundary}{
-This boundary correction reduces the bandwidth adaptively once the
+This boundary correction [2] reduces the bandwidth adaptively once the
 relative difference of parameter values between two centers of mass
 falls below the given threshold. This measure delays convergence and
 enables the curve to proceed further into the end points. If set to 0,
-this boundary correction is switched off.  The boundary correction is
-due to Einbeck & Zayed (2010).  
+this boundary correction is switched off. 
 }
 \item{convergence.at}{
 This forces the curve to stop if  the
 relative difference of parameter values between two centers of mass
 falls below the given threshold.  If set to 0, then the curve will
-always stop after at most \code{iter} iterations.
+always stop after exactly \code{iter} iterations.
 }
   \item{pruning.thresh}{
 Prunes branches corresponding to higher-depth starting points if
-their density estimate falls below this threshold.  Usually, between 0.0
-and 0.3. The setting 0.0 means no pruning. Only available for 2D curves.
+their density estimate falls below this threshold.  Typically, a value between 0.0
+and 1.0. The setting 0.0 means no pruning.
 }
   \item{rho0}{
 A numerical value which  steers the birth process of higher-depth starting
-points. Usually, between 0.3 and 0.4. See Einbeck, Tutz and Evers (2005). Only available for 2D curves.
+points. Usually, between 0.3 and 0.4 (see reference [1]). 
 }
   \item{cross}{Logical parameter. If TRUE, curves are stopped when they
     come too close to an existing branch. Used in the self-coverage function. 
@@ -62,9 +61,9 @@ A list of the six specified parameters, which can be read by the
 %% ...
 }
 \references{
-Einbeck, J., Tutz, G. & Evers, L. (2005): Exploring Multivariate Data Structures with Local Principal Curves. In: Weihs, C. and Gaul, W. (Eds.): Classification - The Ubiquitous Challenge. Springer, Heidelberg, pages 256-263. 
+[1] Einbeck, J., Tutz, G. & Evers, L. (2005): Exploring Multivariate Data Structures with Local Principal Curves. In: Weihs, C. and Gaul, W. (Eds.): Classification - The Ubiquitous Challenge. Springer, Heidelberg, pages 256-263. 
 
-Einbeck, J. and Zayed, M. (2011). Some asymptotics for localized
+[2] Einbeck, J. and Zayed, M. (2011). Some asymptotics for localized
 principal components and curves. Working paper, Durham University. Unpublished.
 }
 

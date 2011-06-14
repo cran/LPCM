@@ -1,5 +1,6 @@
-plot.lpc <- function(x, type, unscale=TRUE, lwd=1, datcol="grey60",   datpch=21, masscol=2, masspch=15, curvecol=1, splinecol=3, projectcol=4, startcol=1:3, startpch=NULL,...){
+plot.lpc <- function(x, type, unscale=TRUE, lwd=1, datcol="grey60",   datpch=21, masscol=NULL, masspch=15, curvecol=1, splinecol=3, projectcol=4, startcol=NULL, startpch=NULL,...){
 
+     
    object <- x
    if (class(object)=="lpc.spline"){
        splineobject <- object
@@ -14,8 +15,7 @@ plot.lpc <- function(x, type, unscale=TRUE, lwd=1, datcol="grey60",   datpch=21,
      else if (class(object)=="lpc.spline" && object$project==FALSE){type="spline"}
      else if (class(object)=="lpc.spline" && object$project){type=c("spline","project")}
    }                                                   
-     
-    
+          
       
    if ("project" %in% type  && class(object)=="lpc" || "project" %in% type &&  class(object)=="lpc.spline" && object$closest.branch=="none"  ){
        splineobject <-    lpc.spline(lpcobject, project=TRUE)
@@ -27,15 +27,24 @@ plot.lpc <- function(x, type, unscale=TRUE, lwd=1, datcol="grey60",   datpch=21,
    d        <- dim(lpcobject$data)[2]
    branch   <- as.factor(lpcobject$P[,"branch"])
    nbranch  <- nlevels(branch)
-   lc       <- length(curvecol)  
-   mc       <- length(masscol)
+   lc       <- length(curvecol)   
    sc       <- length(splinecol)
-   pc       <- length(projectcol)
-   stc      <- length(startcol)
+   pc       <- length(projectcol)  
    stnames  <- dimnames(lpcobject$start)[[1]]
    stdepth  <- as.numeric(stnames)   
    maxdepth <- max(stdepth)
-
+  
+   
+   if (is.null(masscol)){
+     masscol<-as.numeric(c(2,4,1)[1:maxdepth])
+   }
+   if (is.null(startcol)){
+     startcol<-as.numeric(c(6,5,"grey20")[1:maxdepth])
+   }
+   
+   mc       <- length(masscol)
+   stc      <- length(startcol)  
+     
   if (!is.null(startpch)){
           if (length(stnames)!=length(startpch)){
              stnames<-rep(startpch[1], length(stnames))
@@ -76,15 +85,22 @@ if (d==2){
                }         
           }
    }       
-   if ("start" %in% type){
-      points(start, col = if (stc >= maxdepth) startcol[stdepth] else startcol, pch=stnames)
-   }  
+   
           
   if ("mass" %in% type){
-      for (j in 0:(nbranch-1)){ 
-        points(fit[branch==j,], pch=masspch, col=if (mc>=nbranch) masscol[j+1] else if (mc>1) rep(masscol,ceiling(nbranch/mc))[j+1] else masscol)
-      }  
-   }        
+      if (mc== dim(fit)[1]){
+             points(fit, col=masscol,  pch=masspch )
+      } else {
+         for (j in 0:(nbranch-1)){ 
+            points(fit[branch==j,], pch=masspch, col=  if (mc==maxdepth)  masscol[as.numeric(dimnames(start)[[1]])[j+1] ]  else  if  (mc>=nbranch) masscol[j+1] else if
+          (mc>1) rep(masscol,ceiling(nbranch/mc))[j+1] else masscol)
+         }
+      }   
+   }
+   if ("start" %in% type){
+      points(start, col = if (stc == maxdepth) startcol[stdepth] else startcol, pch=stnames)
+   } 
+   
    if ("spline" %in% type){
        for (j in 0:(nbranch-1)){ 
            lines(knots.coords[[j+1]][1,],knots.coords[[j+1]][2,], lwd=lwd, col= if (sc>=nbranch) splinecol[j+1] else if (sc>1) rep(splinecol,ceiling(nbranch/sc))[j+1] else splinecol)
@@ -103,7 +119,7 @@ if (d==2){
       
    
 } else if (d==3){
-    
+  
    require(scatterplot3d)
    plotlpc3 <- scatterplot3d(Xi, color=datcol, pch=datpch,...)
    if ("curve" %in% type){ 
@@ -112,15 +128,24 @@ if (d==2){
          }         
        }
 
-    if ("start" %in% type){
-      plotlpc3$points3d(start, col = startcol, pch="1")
-   }  
+
    
    if ("mass" %in% type){
-      for (j in 0:(nbranch-1)){ 
-        plotlpc3$points3d(fit[branch==j,], pch=masspch, col=if (mc>=nbranch) masscol[j+1] else if (mc>1) rep(masscol,ceiling(nbranch/mc))[j+1] else masscol, type="p")
-      }
-   }
+          if (mc== dim(fit)[1]){
+              plotlpc3$points3d(fit, col=masscol,  pch=masspch )
+          } else {  
+              for (j in 0:(nbranch-1)){ 
+              plotlpc3$points3d(fit[branch==j,], pch=masspch, col= if (mc==maxdepth)  masscol[as.numeric(dimnames(start)[[1]])[j+1] ]  else  if (mc>=nbranch) masscol[j+1] else if (mc>1) rep(masscol,ceiling(nbranch/mc))[j+1] else masscol, type="p")
+              }
+          }    
+        }
+   
+    if ("start" %in% type){
+      plotlpc3$points3d(start, col = if (stc == maxdepth) startcol[stdepth] else startcol, pch=stnames)
+   }  
+
+
+   
   if ("spline" %in% type){
        for (j in 0:(nbranch-1)){
            plotlpc3$points3d(t(knots.coords[[j+1]]), lwd=lwd, col= if (sc>=nbranch) splinecol[j+1] else if (sc>1) rep(splinecol,ceiling(nbranch/sc))[j+1] else splinecol, type="l")

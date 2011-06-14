@@ -41,7 +41,7 @@ data is the classification of all the objects as well as the estimation of
 stellar astrophysical parameters (effective stellar temperature, surface gravity, metallicity). This will be done on the basis of
 high-dimensional spectroscopic and astrometric data such as those ones given here. 
 
-More precisely, the  spectral data come in form of photon counts ("fluxes") observed in (originally) 96 wavelength intervals ("bands"), see Bailer-Jones (2010) for more details. The data given here are a 16-dimensional subset created by binning/selecting from the 96 bands.  The counts given here are standardized, i.e. they are divided by the total number of incoming photons over all filters  (In other words, they add up to 1).  Note that these data are simulated using computer models. The satellite which will collect the actual data will be launched in 2012.
+More precisely, the  spectral data come in form of photon counts ("fluxes") observed in (originally) 96 wavelength intervals ("bands"), see Bailer-Jones (2010) for more details. The data given here are a 16-dimensional subset created by binning/selecting from the 96 bands.  The counts given here are standardized, i.e. they are divided by the total number of incoming photons over all filters  (in other words, they add up to 1).  Note that these data are simulated using computer models. The satellite which will collect the actual data will be launched in 2012.
 
 The 16-d spectral data  have been used in Einbeck, Evers and Bailer-Jones (2008) as well as Einbeck, Evers and Powell (2010) in order to predict the stellar temperature.
 
@@ -50,7 +50,7 @@ The 16-d spectral data  have been used in Einbeck, Evers and Bailer-Jones (2008)
 Coryn Bailer-Jones (MPIA Heidelberg).
 }
 \references{
-Bailer-Jones, C.A.L. (2010). The ILIUM forward modelling algorithm for multivariate parameter estimation and its application to derive stellar parameters from Gaia spectrophotometry, Monthly Motices of the Royal Astronomical Society, vol. 403, pp. 96-116.
+Bailer-Jones, C.A.L. (2010). The ILIUM forward modelling algorithm for multivariate parameter estimation and its application to derive stellar parameters from Gaia spectrophotometry, Monthly Notices of the Royal Astronomical Society, vol. 403, pp. 96-116.
 
 Einbeck, J., Evers, L., and Bailer-Jones, C.A.L. (2008).  Representing complex data using localized principal components with application to astronomical data. In: Gorban, A, Kegl, B, Wunsch, D, & Zinovyev, A:  Principal Manifolds for Data Visualization and Dimension Reduction; Lecture Notes in Computational Science and Engineering  58, 180-204, ISSN/ISBN: 978-3-540-73749-0. 
 

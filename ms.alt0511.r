@@ -126,7 +126,7 @@ ms<-function (X, h, subset, thr = 0.001, scaled = TRUE, plotms = 2,
 # Mean shift clustering bandwidth selection
 ms.self.coverage <-
 function (X, taumin = 0.02, taumax = 0.5, gridsize = 25, thr = 0.001, 
-    scaled = TRUE, cluster = FALSE,  plot.type = "o", or.labels = NULL, print=FALSE, 
+    scaled = TRUE, draw=1/3, cluster = FALSE,  plot.type = "o", or.labels = NULL, print=FALSE, 
     ...) 
 {
     X <- as.matrix(X)
@@ -137,14 +137,14 @@ function (X, taumin = 0.02, taumax = 0.5, gridsize = 25, thr = 0.001,
     h0 <- taumin
     h1 <- taumax
     h <- seq(h0, h1, length = gridsize)
+    #n <- gridsize
     n <-dim(X)[1]
     cover <- matrix(0, gridsize, 2)
     for (i in 1:gridsize) {
         new.h0 <- h[i]
         fit <- ms(X, new.h0,  thr = thr, scaled = scaled, plotms = 0,  or.labels=or.labels)
-        #set <-   sample(n,n %/% (1/draw))
-        #find <- as.numeric(names(table(fit$cluster.label[set])))
-        find <- as.numeric(which(table(fit$cluster.label)>2))  # changed 23/05/11
+        set <-   sample(n,n %/% (1/draw))
+        find <- as.numeric(names(table(fit$cluster.label[set])))
         Pm[[i]] <- fit$cluster.center[find,] 
         if (!is.matrix(Pm[[i]])){Pm[[i]]<- matrix(Pm[[i]],nrow=1, dimnames=list(dimnames(fit$cluster.center)[[1]][find] ,NULL))}
         if (!cluster) {   
@@ -155,7 +155,7 @@ function (X, taumin = 0.02, taumax = 0.5, gridsize = 25, thr = 0.001,
         
     }
     select <- select.self.coverage(self = cover, 
-        smin = 1/3, plot.type = plot.type)
+        smin = draw, plot.type = plot.type, auto = FALSE)
     result <- list(self.coverage.curve = cover, select = select, 
         type = "ms")
     class(result) <- "self"

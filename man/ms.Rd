@@ -11,8 +11,11 @@ Mean shift clustering.
 \description{
 Functions for mean shift, iterative mean shift,  mean shift clustering,
 and bandwidth selection for mean shift clustering (based on
-self-coverage). These are experimental (and not fully documented) functions which implement the
-techniques presented in Einbeck (2010).
+self-coverage). The main function is \code{ms} which, for a given
+bandwidth, detects the local modes and performs the clustering.
+
+These  functions implement the
+techniques presented in Einbeck (2011).
 }
 
 \usage{
@@ -20,29 +23,31 @@ meanshift(X, x, h)
 ms.rep(X, x, h, plotms=1, thresh= 0.00000001, iter=100)
 ms(X, h, subset,  thr=0.001, scaled= TRUE, plotms=2, or.labels=NULL, ...)
 ms.self.coverage(X, taumin=0.02, taumax=0.5, gridsize=25,
-       thr=0.001, scaled=TRUE, draw=1/3,  cluster=FALSE, plot.type="o", 
+       thr=0.001, scaled=TRUE, cluster=FALSE, plot.type="o", 
        or.labels=NULL, print=FALSE, ...)
 }
 
 \arguments{
-  \item{X}{Data matrix.}
-  \item{h}{Bandwidth.}
-  \item{x}{Point from which we wish to shift to the local mean.}
-  \item{subset}{Vector specifying a subset of \code{1:n}. This allows to run the iterative mean shift procedure only
+  \item{X}{data matrix.}
+  \item{h}{bandwidth.}
+  \item{x}{point from which we wish to shift to the local mean.}
+  \item{subset}{vector specifying a subset of \code{1:n}. This allows to run the iterative mean shift procedure only
   from a subset of points (if unspecified, \code{1:n} is used here,
   i.e. each data point serves as a starting point).} 
-\item{scaled}{Logical.}
-  \item{taumin,taumax,gridsize}{Determine the grid of bandwidths to
+\item{scaled}{logical.}
+  \item{taumin,taumax,gridsize}{determine the grid of bandwidths to
     investigate.}
-  \item{draw}{Only cluster centers belonging to this (randomly selected)
-  fraction of the original
-  data cloud are used for the computation of the self-coverage.}
-  \item{thresh, thr, iter}{Parameters controlling convergence behavior.}
+  \item{thresh, iter}{mean shift iterations are stopped when the
+  mean shift length (relative to the length of \code{x}) falls below
+      \code{thresh}, or  after \code{iter} iterations (whatever event
+  happens first).} 
+  \item{thr}{adjacent mean shift clusters are merged if their relative
+  distance falls below this threshold.}
   \item{cluster}{if \code{TRUE}, distances are always measured to the
     cluster to which an observation is assigned, rather than to the
     nearest cluster.}
-  \item{plotms, plot.type, or.labels, ...}{Graphical parameters.}
-  \item{print}{If TRUE, coverage values are printed on the screen as soon as
+  \item{plotms, plot.type, or.labels, ...}{graphical parameters.}
+  \item{print}{if TRUE, coverage values are printed on the screen as soon as
   computed. This is quite helpful especially if \code{gridsize} is large.} 
 }
 
@@ -88,9 +93,9 @@ reduced by \eqn{80\%}{80\%} (compared to the distances to the overall mean).
 Chen, Y. (1995).  Mean Shift, Mode Seeking, and Clustering. IEEE
 Transactions on Pattern Analysis and Machine Intelligence, 17, 790-799.
 
-Einbeck, J. (2010). Bandwidth selection for mean-shift based
+Einbeck, J. (2011). Bandwidth selection for mean-shift based
 unsupervised learning techniques: a unified approach via
-self-coverage. Working paper, Durham University. 
+self-coverage.  Journal of Pattern Recognition Research, to appear.
 }
 
 \author{

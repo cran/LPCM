@@ -9,7 +9,7 @@ Local principal curves
 This is the main function which computes the actual local principal curve, i.e. a sequence of local centers of mass.
 }
 \usage{
-lpc(X, h, t0 = mean(h),  x0,  mult = 1, way = "two",  scaled = TRUE,
+lpc(X, h, t0 = mean(h),  x0,  way = "two",  scaled = TRUE,
       weights=1, pen = 2, depth = 1, control=lpc.control())
 }
 %- maybe also 'usage' for other objects documented here.
@@ -27,22 +27,20 @@ bandwidth. May be either specified as a single number, then the same bandwidth i
   \item{t0}{scalar step length. Default setting is \code{t0=h}, if \code{h} is a scalar, and \code{t0=mean(h)}, if \code{h} is a vector.
 }
 
-  \item{x0}{
-    optionally, one can set one or more  starting points here. This can
+  \item{x0}{ specifies the choice of starting points.  The default
+    choice \code{x0=1} will select one suitable starting point automatically (in
+    form of a local density mode). The second built-in option \code{x0=0} will
+    use all local density modes as starting points, hence produce
+    as many branches as modes.  Optionally, one
+    can also set one or more  starting points manually here. This can
     be done in form of a matrix, where each row corresponds to a
     starting point, or in form of a vector, where starting points are
     read in consecutive order from the entries of the vector. 
-    The starting point has always to be specified on the original data scale, even if \code{scaled=TRUE}. 
+    The starting point has always to be specified on the original data
+    scale, even if \code{scaled=TRUE}. A fixed  number of starting
+    points can be enforced through option \code{mult} in \code{lpc.control}.
    }
-    \item{mult}{
-numerical value which specifies the number of starting points.  If the
-    number  given here is larger than the number of starting points
-    provided at \code{x0},  then the missing points will be set at
-    random. For example, if \eqn{d=2}, \code{mult=3}, and
-    \code{x0=c(58.5, 17.8, 80,20)},  then one gets the starting points (58.5, 17.8), (80,20), and a randomly
-     chosen  third one.  Another example for such a situation  is \code{mult=1}, with
-    \code{x0} being unspecified.
-     }
+  
   \item{way}{"one": go only in direction of the first local eigenvector,
      "back": go only in opposite direction,
  	 "two": go from starting point in both directions.
@@ -68,7 +66,7 @@ maximum depth of branches (\eqn{\phi_{max}}{phi_max} in [2]),
     depth 3. ) 
    }
 \item{control}{
-Additional parameters steering particularly the boundary and convergence
+Additional parameters steering particularly the starting-, boundary-, and convergence
  behavior of the fitted curve. See \code{\link{lpc.control}}.
 }
 }
@@ -113,12 +111,11 @@ Additional parameters steering particularly the boundary and convergence
 }
 
 \author{
-J. Einbeck and L. Evers, with contributions by J.
-Dwyer and M. Zayed.
+  J. Einbeck and L. Evers.  See \code{\link{LPCM-package}} for further acknowledgements.
 }
 \note{
 All values provided in the output refer to the scaled data, if
-\code{scaled=TRUE}.  Use \code{\link{lpc.unscale}} to convert the
+\code{scaled=TRUE}.  Use \code{\link{unscale}} to convert the
 results back to the original data scale. 
   
 The option \code{scaled=TRUE} scales the data by dividing each variable through their
@@ -148,8 +145,8 @@ lpc1 <- lpc(calspeedflow[,3:4])
 plot(lpc1)
 
 data(mussels, package="dr")
-lpc2 <- lpc(mussels[,-3], x0=as.numeric(mussels[49,-3]), scaled=FALSE)
-pairs(lpc2$LPC, panel="lines", labels= c("H","L","S","W") )
+ lpc2 <- lpc(mussels[,-3], x0=as.numeric(mussels[49,-3]),scaled=FALSE)
+ plot(lpc2, curvecol=2)
 
 data(gaia)
 s <- sample(nrow(gaia),200)

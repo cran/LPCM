@@ -6,19 +6,24 @@
 Auxiliary parameters for controlling local principal curves.
 }
 \description{
-This function bundles parameters controlling mainly the convergence-, boundary-,
+This function bundles parameters controlling mainly the starting-, convergence-, boundary-,
 and stopping-behaviour of the local principal curve. It will be used
 only inside the \code{lpc()} function argument. 
 }
 \usage{
-lpc.control(iter =100, boundary = 0.005, convergence.at =0.00001,
-     pruning.thresh=0.0, rho0=0.4, cross=TRUE) 
+lpc.control(iter =100, cross=TRUE,
+            boundary = 0.005, convergence.at = 0.00001,
+            mult=NULL, ms.h=NULL, ms.sub=30, 
+            pruning.thresh=0.0, rho0=0.4) 
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{iter}{
 Maximum number of iterations on either side of the starting point within each branch.
 }
+ \item{cross}{Logical parameter. If TRUE, curves are stopped when they
+    come too close to an existing branch. Used in the self-coverage function. 
+ }
   \item{boundary}{
 This boundary correction [2] reduces the bandwidth adaptively once the
 relative difference of parameter values between two centers of mass
@@ -32,6 +37,28 @@ relative difference of parameter values between two centers of mass
 falls below the given threshold.  If set to 0, then the curve will
 always stop after exactly \code{iter} iterations.
 }
+ \item{mult}{ numerical value which enforeces a fixed number of starting points.  If the
+    number  given here is larger than the number of starting points
+    provided at \code{x0},  then the missing points will be set at
+    random (For example, if \eqn{d=2}, \code{mult=3}, and
+    \code{x0=c(58.5, 17.8, 80,20)},  then one gets the starting points (58.5, 17.8), (80,20), and a randomly
+     chosen  third one.  Another example for such a situation is \code{x0=NULL} with
+    \code{mult=1}, in which one random starting point is chosen). If the number given here is smaller the number of starting points
+    provided at \code{x0}, then only the first \code{mult} starting
+    points will be used.
+  }
+  \item{ms.h}{sets the bandwidth (vector) for the initial mean shift procedure
+    which finds the local density modes, and, hence, the starting points
+    for the LPC. If unspecified, the bandwidth \code{h}  used in
+    function \code{lpc} is used here too.
+  }
+  \item{ms.sub}{ proportion of data points (default=30) which are used to initialize
+    mean shift trajectories for the mode finding. In fact, we use
+    
+    \code{min(max(ms.sub, floor(ms.sub*N/100)), 10*ms.sub)}
+
+    trajectories.
+  }
   \item{pruning.thresh}{
 Prunes branches corresponding to higher-depth starting points if
 their density estimate falls below this threshold.  Typically, a value between 0.0
@@ -41,10 +68,8 @@ and 1.0. The setting 0.0 means no pruning.
 A numerical value which  steers the birth process of higher-depth starting
 points. Usually, between 0.3 and 0.4 (see reference [1]). 
 }
-  \item{cross}{Logical parameter. If TRUE, curves are stopped when they
-    come too close to an existing branch. Used in the self-coverage function. 
-       }
-     }
+ 
+}
 
 
      
@@ -52,7 +77,7 @@ points. Usually, between 0.3 and 0.4 (see reference [1]).
 %%  ~~ If necessary, more details than the description above ~~
 %}
 \value{
-A list of the six specified parameters, which can be read by the
+A list of the nine specified imput parameters, which can be read by the
 \code{control} argument of the \code{lpc} function. 
 %%  ~Describe the value returned
 %%  If it is a LIST, use

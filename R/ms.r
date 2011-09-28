@@ -1,20 +1,26 @@
 
 # Mean shift base function
 meanshift<-function(X, x, h){
-   g1 <- function(xi, x, h){ # 1-d pfofile
-   1/2*exp(-1/2*((x-xi)/h)^2)
+   g1 <- function(xi, x, h){ # 1-d profile
+     1/2*exp(-1/2*((x-xi)/h)^2)
    }
    gd <- function(Xi,x,h){# Multi-d profile
-   d<-length(x)
-   k<-1
-   for (j in 1:d){
-     k<- k* g1(Xi[,j],x[j],h[j])}
-   k
+     d<-length(x)
+     k<-1
+     for (j in 1:d){
+        k<- k* g1(Xi[,j],x[j],h[j])
+     }
+     k
    }
-   if(is.vector(X)){X<-matrix(X,nrow=length(X))}
+   d <- dim(X)[2]
+   if (length(h) == 1) {
+        h <- rep(h, d)
+    }
+   if(is.vector(X)){
+       X<-matrix(X,nrow=length(X))
+   }
    x <- as.numeric(x)
    g <- gd(X, x, h)
-   d <- dim(X)[2]
    ms <- NULL
    for (j in 1:d){
                  ms[j]<-sum(X[,j]*g)/sum(g)
@@ -23,11 +29,15 @@ meanshift<-function(X, x, h){
    }
 
 # Mean shift iterative function (until convergence ...)
-ms.rep <- function (X, x, h, plotms=1, thresh= 0.00000001, iter=100) {    
-          s    <- 0
+ms.rep <- function (X, x, h, plotms=1, thresh= 0.00000001, iter=200) {    
+          s  <- 0
           th <- rep(0,iter)
           M  <-matrix(0, iter, length(x))
           x0 <- x
+          d  <- dim(X)[2]
+          if (length(h) == 1) {
+              h <- rep(h, d)
+          }
           for (j in 1: iter){
             m     <- meanshift(X, x, h)
             M[j,] <- m
@@ -47,26 +57,29 @@ ms.rep <- function (X, x, h, plotms=1, thresh= 0.00000001, iter=100) {
 
 # Mean shift clustering
 
-ms<-function (X, h, subset, thr = 0.001, scaled = TRUE, plotms = 2, 
-    or.labels = NULL,...) 
+ms<-function (X, h, subset, thr = 0.0001, scaled = TRUE, iter=200, plotms = 2, 
+    or.labels = NULL, ...) 
 {
     n <- dim(X)[1]
     d <- dim(X)[2]
     if (missing(subset)) {
         subset <- 1:n
     }
-    scaled.by <- rep(1, d)
-    if (scaled) {
-        scaled.by <- apply(X, 2, function(dat) {
-            diff(range(dat))
-        })
-        X <- sweep(X, 2, scaled.by, "/")
-    }
-    if (d == 2 && plotms > 0) {
-        if (missing(or.labels)) {
+   s1       <- apply(X, 2, function(dat){ diff(range(dat))})  # range 
+   if (missing(h)){
+        if (!scaled){h   <- s1/10 } else { h<- 0.1}
+   } # bandwidth by default: 10% of range
+   if (length(h)==1){h <- rep(h,d)}
+   if (scaled){        # scales the data to lie by its range
+        X <- sweep(X, 2, s1, "/")
+   } 
+
+  
+   if (d == 2 && plotms > 0) {
+        if (missing(or.labels)) {            
             plot(X, col = "grey70", ...)
         }
-        else {
+        else {          
             plot(X, col = or.labels, ...)
         }
     }
@@ -78,7 +91,7 @@ ms<-function (X, h, subset, thr = 0.001, scaled = TRUE, plotms = 2,
         h <- rep(h, d)
     }
     for (i in subset) {
-        temp.ms <- ms.rep(X, X[i, ], h, plotms = 0, thresh = 1e-08, iter=150)
+        temp.ms <- ms.rep(X, X[i, ], h, plotms = 0, thresh = 1e-08, iter)
         finals[i, ] <- temp.ms$final
         cluster.dist <- rep(0, ncluster)
         if (ncluster >= 1) {
@@ -87,6 +100,7 @@ ms<-function (X, h, subset, thr = 0.001, scaled = TRUE, plotms = 2,
                   ])/enorm(savecluster[j, ])
             }
         }
+       
         if (ncluster == 0 || min(cluster.dist) > thr) {
             ncluster <- ncluster + 1
             savecluster <- rbind(savecluster, finals[i, ])
@@ -103,6 +117,7 @@ ms<-function (X, h, subset, thr = 0.001, scaled = TRUE, plotms = 2,
                 col = cluster.label[i] + 1)
         }
     }
+   # print(finals)
     for (i in subset){
          closest.label[i] <- mindist(savecluster, X[i,])$closest.item
          #closest.coords[i,]<- object$cluster.center[closest.center,]
@@ -116,16 +131,27 @@ ms<-function (X, h, subset, thr = 0.001, scaled = TRUE, plotms = 2,
     if (d > 2 && plotms > 1) {
         pairs(rbind(as.matrix(X), savecluster), col = c(cluster.label + 
             1, rep(1, dim(savecluster)[1])), pch = c(rep(20, 
-            dim(X)[1]), rep(24, dim(savecluster)[1])))
+            dim(X)[1]), rep(24, dim(savecluster)[1])), ...)
     }
     dimnames(savecluster) <- list(1:ncluster, NULL)
-    return(list( cluster.center = savecluster, cluster.label = cluster.label, closest.label = closest.label, data = X, scaled.by = scaled.by))
+
+    fit <- list(
+                cluster.center = savecluster,
+                cluster.label = cluster.label,
+                closest.label = closest.label,
+                h=h,
+                data = X,              
+                scaled= scaled, 
+                scaled.by =  if (scaled) s1 else rep(1,d)
+                )
+    class(fit) <- "ms"
+    return(fit)
 }
 
 
 # Mean shift clustering bandwidth selection
 ms.self.coverage <-
-function (X, taumin = 0.02, taumax = 0.5, gridsize = 25, thr = 0.001, 
+function (X, taumin = 0.02, taumax = 0.5, gridsize = 25, thr = 0.0001, 
     scaled = TRUE, cluster = FALSE,  plot.type = "o", or.labels = NULL, print=FALSE, 
     ...) 
 {

@@ -8,11 +8,11 @@ followx<-function(Xi, x0, h, t0, iter, way,  weights, pen=2,  phi =1, lasteigenv
    else {stop("way has to be one of: one, two, back.")}
 
    highrhopoints <- matrix(0,0,d)					# here points with high local 2nd eigenvalue will be stored
-   save.xd       <- eigen.vecd<-matrix(0, b*iter,d)			# here the LPC will be stored
-   cos.alt.neu   <- rep(1, b*iter)
-   lambda        <- rep(NA, b*iter)                                     # Parametrization
-   rho           <- rep(0, b*iter)					# construction of empty vectors
-   c0            <- rep(1,b*iter)
+   save.xd      <- eigen.vecd<-matrix(0, b*iter,d)			# here the LPC will be stored
+   cos.alt.neu  <- cos.neu.neu  <- rep(1, b*iter)
+   lambda       <- rep(NA, b*iter)                                     # Parametrization
+   rho          <- rep(0, b*iter)					# construction of empty vectors
+   c0           <- rep(1,b*iter)
    x <- x0
 
    
@@ -41,9 +41,14 @@ followx<-function(Xi, x0, h, t0, iter, way,  weights, pen=2,  phi =1, lasteigenv
 
        if (i == iter && lasteigenvector[1] !=0){ cos.alt.neu[i]<- sum(lasteigenvector* eigen.vecd[i,]) }
        if (i < iter){ cos.alt.neu[i]<- sum(eigen.vecd[i+1,]* eigen.vecd[i,])}
-										 # angle between current and previous eigenvector
-       if (cos.alt.neu[i]<0){ eigen.vecd[i,]<- - eigen.vecd[i,]}
-										 # signum flipping
+									   # angle between current and previous eigenvector
+       if (cos.alt.neu[i]<0){ eigen.vecd[i,]<- - eigen.vecd[i,]
+                              cos.neu.neu[i] <- - cos.alt.neu[i]
+       } else {
+                    cos.neu.neu[i] <- cos.alt.neu[i]
+       }
+        							         # signum flipping
+       
        if (pen>0 && i<iter){
              a<-(abs(cos.alt.neu[i]))^pen
              eigen.vecd[i,]<-a* eigen.vecd[i,] + (1-a)*eigen.vecd[i+1,]
@@ -96,7 +101,14 @@ followx<-function(Xi, x0, h, t0, iter, way,  weights, pen=2,  phi =1, lasteigenv
       }
       if (i == (1 + iter) && lasteigenvector [1] != 0){ cos.alt.neu[i]<- -sum(lasteigenvector* eigen.vecd[i,])}
       if (i >= (2 + iter)){ cos.alt.neu[i]<- sum(eigen.vecd[i-1,]* eigen.vecd[i,])}
-      if (cos.alt.neu[i]<0){ eigen.vecd[i,]<- - eigen.vecd[i,]}
+      if (cos.alt.neu[i]<0){
+                       eigen.vecd[i,]<- - eigen.vecd[i,]
+                       cos.neu.neu[i] <- - cos.alt.neu[i]
+      } else {
+                    cos.neu.neu[i] <- cos.alt.neu[i]
+      }
+
+        
 
       if (pen>0 && i>=(2+iter)){
               a<-(abs(cos.alt.neu[i]))^pen
@@ -134,6 +146,6 @@ followx<-function(Xi, x0, h, t0, iter, way,  weights, pen=2,  phi =1, lasteigenv
    #print(lambda)
    filter <- !is.na(lambda); if (way =="two" ){filter[iter+1]<- FALSE}###
 
-   list(save.xd[filter,],eigen.vecd[filter,],cos.alt.neu[filter], rho[filter], highrhopoints, round(-lambda[filter]+max(lambda[filter]), digits=4), c0)
+   list(save.xd[filter,],eigen.vecd[filter,],cos.neu.neu[filter], rho[filter], highrhopoints, round(-lambda[filter]+max(lambda[filter]), digits=4), c0)
   
 }# function

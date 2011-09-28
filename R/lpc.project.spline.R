@@ -35,14 +35,16 @@ lpc.project.spline <- function(lpcsl, newdata, num.knots=100, optimize=TRUE) {
       if (optimize) {
         from <- knots.pi[[closest.branch[i]+1]][max(1,closest.idx[i]-1)]
         to <- knots.pi[[closest.branch[i]+1]][min(num.knots,closest.idx[i]+1)]
-       
-        opt <- optimize(squared.distance,lower=from,upper=to,coords=newdata[i,],sps=lpcsl[[closest.branch[i]+1]]$splinefun)
-       
-        closest.or.pi[i] <- opt$minimum
-        closest.dist[i] <- sqrt(opt$objective)
-      } else {
+        if (from==to){
+            closest.dist[i] <- sqrt(squared.distance(closest.or.pi[i],coords=newdata[i,],sps=lpcsl[[closest.branch[i]+1]]$splinefun))
+        }  else {           
+           opt <- optimize(squared.distance,lower=from,upper=to,coords=newdata[i,],sps=lpcsl[[closest.branch[i]+1]]$splinefun)
+           closest.or.pi[i] <- opt$minimum
+           closest.dist[i] <- sqrt(opt$objective)
+        }
+     } else {
         closest.dist[i] <- sqrt(squared.distance(closest.or.pi[i],coords=newdata[i,],sps=lpcsl[[closest.branch[i]+1]]$splinefun))
-      }
+     }
     }
     closest.pi <- lpc.curve.length(lpcsl,closest.or.pi,closest.branch)
     closest.coords <- lpc.spline.eval(lpcsl, closest.or.pi, closest.branch)

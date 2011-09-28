@@ -1,4 +1,9 @@
-Rc <-function(data,  closest.coords,   type="curve"){
+Rc <- function(x, ...){
+  UseMethod("Rc")
+}  
+
+
+base.Rc <-function(data,  closest.coords,   type="curve"){
   
   data <- as.matrix(data)
   if (missing(closest.coords)) {
@@ -47,9 +52,16 @@ Rc <-function(data,  closest.coords,   type="curve"){
   
 
 
+Rc.ms <- function(x,...){
+  base.Rc(x$data, x$cluster.center[x$closest.label,], type="points")
+}  
 
-lpc.Rc <- function(object){
+  
 
+
+
+Rc.lpc <- function(x,...){
+  object<- x
   if (class(object)=="lpc"){
      data <-object$data
      closest.coords <- lpc.spline(object, project=TRUE)$closest.coords
@@ -70,7 +82,7 @@ lpc.Rc <- function(object){
       stop("invalid object class.")
   }
    
-  R <- Rc(data, closest.coords, type="curve")
+  R <- base.Rc(data, closest.coords, type="curve")
   #  R <- Rc(data, closest.coords, weights, type="curve")
   return(R)
   }
@@ -78,3 +90,5 @@ lpc.Rc <- function(object){
 
 
 
+
+Rc.lpc.spline <- Rc.lpc

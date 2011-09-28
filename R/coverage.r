@@ -106,28 +106,53 @@ lpc.coverage<-function(object, taumin=0.02, taumax, gridsize=25,  quick=TRUE, pl
   
 
 lpc.self.coverage <-
-function (X, taumin = 0.02, taumax = 0.5, gridsize = 25, x0, 
-    mult = 1, way = "two", scaled = TRUE, weights = 1, pen = 2, 
+function (X, taumin = 0.02, taumax = 0.5, gridsize = 25, x0=1, 
+    way = "two", scaled = TRUE, weights = 1, pen = 2, 
     depth = 1, control = lpc.control(boundary = 0, cross = FALSE), 
     quick = TRUE, plot.type = "o", print = FALSE, ...) 
-{
+    {
     if (class(X) %in% c("lpc", "lpc.spline")) {
         stop("Invalid data matrix.")
     }
+   
+    
     Xi <- as.matrix(X)
     N <- dim(Xi)[1]
     d <- dim(Xi)[2]
-    if (!missing(x0)) {
-        x0 <- matrix(x0, ncol = d, byrow = TRUE)
-        if (dim(x0)[1] < mult) {
-            rn <- runif(mult - dim(x0)[1], 1, N + 1)%/%1
-            x0 <- rbind(x0, Xi[rn, ])
-        }
+    mult <- control$mult; ms.h<-control$ms.h; ms.sub<-control$ms.sub        
+
+    s1       <- apply(Xi, 2, function(dat){ diff(range(dat))})  # range
+    if (length(x0)==1 && x0==1){   
+      n  <- sample(N,1);
+      X  <-  if (scaled){ sweep(Xi, 2, s1, "/")} else {Xi}
+      x0 <- matrix(ms.rep(X, X[n,],ms.h, plotms=0)$final, nrow=1)
+      x0 <- if (scaled) x0*s1 else x0   # unscales again
+      rm(X)
+     }  else if (length(x0)==1 && x0==0 ){
+          if (N<= ms.sub) {
+              sub<- 1:ms.sub
+          }  else {    
+              Nsub <- min(max(ms.sub, floor(ms.sub*N/100)), 10*ms.sub)
+              #print(Nsub)
+              sub <- sample(1:N, Nsub)
+          }
+          x0<- suppressWarnings(unscale(ms(Xi, ms.h, subset=sub, plotms=0, scaled=scaled)))$cluster.center
+     }  else {
+        if (is.null(x0)){
+             if (is.null(mult)){stop("One needs to allow for at least one starting point.")}
+             x0<- matrix(0, nrow=0, ncol=d)
+        } else {    
+             x0 <- matrix(x0, ncol=d, byrow=TRUE)
+        }   
+    } 
+    if(!is.null(control$mult)){
+     #  stop("It is not permitted to modify mult for this operation.")
+      if (dim(x0)[1] < mult) {n <- runif(mult-dim(x0)[1],1,N+1)%/%1; x0 <- rbind(x0,Xi[n,])} #
+      if (dim(x0)[1] > mult) {x0<-x0[1:mult]} 
     }
-    else {
-        rn <- runif(mult, 1, N + 1)%/%1
-        x0 <- matrix(Xi[rn, ], length(rn), d)
-    }
+    x0       <- as.matrix(x0)    # putting in matrix format; just in case....
+
+    #print(x0)
     if ((!scaled) && taumax < 1) {
         warning("Please adjust the range (taumin, taumax) of tube widths by hand, as the data are not scaled.")
     }
@@ -139,7 +164,7 @@ function (X, taumin = 0.02, taumax = 0.5, gridsize = 25, x0,
     cover <- matrix(0, gridsize, 2)
     for (i in 1:gridsize) {
         new.h0 <- h[i]
-        fit <- lpc(Xi, h = new.h0, t0 = new.h0, x0 = x0, mult = mult, 
+        fit <- lpc(Xi, h = new.h0, t0 = new.h0, x0 = x0,
             way = way, scaled = scaled, weights = weights, pen = pen, 
             depth = depth, control)
         if (!quick) {
@@ -154,9 +179,11 @@ function (X, taumin = 0.02, taumax = 0.5, gridsize = 25, x0,
         cover[i, ] <- as.numeric(coverage.raw(fit$data, Pm[[i]], 
             new.h0, weights, plot.type = 0, print = print)[1:2])
     }
+
+   
     select <- select.self.coverage(self = cover,  
         smin = 2/3, plot.type = plot.type)
-    result <- list(self.coverage.curve = cover, select = select, 
+    result <- list(self.coverage.curve = cover, select = select, x0.unscaled=suppressWarnings(unscale(fit))$start,
         type = "lpc")
     class(result) <- "self"
     result

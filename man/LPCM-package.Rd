@@ -22,15 +22,15 @@ Local principal curve methods
    cubic spline respresentation of the latter; 
    \item \code{\link{lpc.project}}, which enables to compress data by
    projecting them orthogonally onto the curve; 
-   \item \code{\link{lpc.coverage}} and \code{\link{lpc.Rc}} for assessing
+   \item \code{\link{lpc.coverage}} and \code{\link{Rc}} for assessing
    goodness-of-fit;
    \item \code{\link{lpc.self.coverage}} for bandwidth selection;
-   \item the generic \code{plot} and \code{print} functions for objects
+   \item the generic \code{plot} and \code{print} methods for objects
    of class \code{lpc} and \code{lpc.spline}. 
  }
- 
+
 This package also contains some  code for density
-mode detection and  mean shift clustering (as well as bandwidth
+mode detection (`local principal points') and  mean shift clustering (as well as bandwidth
 selection in this context), which implements the methods presented in
 Einbeck (2011). See the help file for \code{\link{ms}}.
 
@@ -54,6 +54,15 @@ Jochen Einbeck and Ludger Evers
 Maintainer: Jochen Einbeck <jochen.einbeck@durham.ac.uk>
 
 }
+
+
+
+\section{Acknowledgements}{
+ Contributions (in form of pieces of code, or useful suggestions for
+ improvements) by Jo Dwyer, Mohammad Zayed, and
+ Ben Oakley are gratefully acknowledged.
+}
+
 \references{
 Einbeck, J., Tutz, G., & Evers, L. (2005), Local principal curves, Statistics and Computing 15, 301-313.
 
@@ -62,7 +71,7 @@ Einbeck, J., Evers, L., & Powell, B. (2010): Data compression and regression thr
 
 Einbeck, J. (2011): Bandwidth selection for nonparametric unsupervised
 learning techniques -- a unified approach via self-coverage. Journal of
-Pattern Recognition Research, to appear.
+Pattern Recognition Research 6, 175-192. 
 }
 \keyword{smooth}
 \keyword{multivariate}

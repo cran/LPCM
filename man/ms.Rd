@@ -12,18 +12,18 @@ Mean shift clustering.
 Functions for mean shift, iterative mean shift,  mean shift clustering,
 and bandwidth selection for mean shift clustering (based on
 self-coverage). The main function is \code{ms} which, for a given
-bandwidth, detects the local modes and performs the clustering.
+bandwidth, detects the local modes (`local principal points') and performs the clustering.
 
-These  functions implement the
-techniques presented in Einbeck (2011).
+These  functions implement the techniques presented in Einbeck (2011).
 }
 
 \usage{
 meanshift(X, x, h)
-ms.rep(X, x, h, plotms=1, thresh= 0.00000001, iter=100)
-ms(X, h, subset,  thr=0.001, scaled= TRUE, plotms=2, or.labels=NULL, ...)
+ms.rep(X, x, h, plotms=1, thresh= 0.00000001, iter=200)
+ms(X, h, subset,  thr=0.0001, scaled= TRUE, iter=200, plotms=2,
+       or.labels=NULL, ...)
 ms.self.coverage(X, taumin=0.02, taumax=0.5, gridsize=25,
-       thr=0.001, scaled=TRUE, cluster=FALSE, plot.type="o", 
+       thr=0.0001, scaled=TRUE, cluster=FALSE, plot.type="o", 
        or.labels=NULL, print=FALSE, ...)
 }
 
@@ -31,8 +31,9 @@ ms.self.coverage(X, taumin=0.02, taumax=0.5, gridsize=25,
   \item{X}{data matrix.}
   \item{h}{bandwidth.}
   \item{x}{point from which we wish to shift to the local mean.}
-  \item{subset}{vector specifying a subset of \code{1:n}. This allows to run the iterative mean shift procedure only
-  from a subset of points (if unspecified, \code{1:n} is used here,
+  \item{subset}{vector specifying a subset of 1:n, where n is the sample
+  size. This allows to run the iterative mean shift procedure only
+  from a subset of points (if unspecified, 1:n is used here,
   i.e. each data point serves as a starting point).} 
 \item{scaled}{logical.}
   \item{taumin,taumax,gridsize}{determine the grid of bandwidths to
@@ -52,8 +53,8 @@ ms.self.coverage(X, taumin=0.02, taumax=0.5, gridsize=25,
 }
 
 \details{
-The methods implemented here are not directly related to local principal curves, but
-have with them the building block "mean shift" in common.
+  The methods implemented here can be used for density mode estimation,
+  clustering, and the selection of starting points for the LPC algorithm.
 
  Chen (1995) showed that, if the mean shift is computed iteratively, the
  resulting sequence of local means converges to a mode of the estimated
@@ -73,7 +74,8 @@ reduced by \eqn{80\%}{80\%} (compared to the distances to the overall mean).
 
 \value{
  
-  For the function \code{ms}:
+  The main function \code{ms} produces an object of class \code{ms},
+  with components:
   
    \item{cluster.center}{a matrix which gives the coordinates of the
   estimated density modes (i.e., of the mean-shift based cluster centers).}
@@ -82,6 +84,7 @@ reduced by \eqn{80\%}{80\%} (compared to the distances to the overall mean).
   \item{closest.label}{assigns each data point to the closest cluster
   center in terms of Euclidean distance.}
 \item{data}{the data frame (scaled if \code{scaled=TRUE}).}
+\item{scaled}{boolean.}
 \item{scaled.by}{the data were scaled by dividing each variable through
   the values provided in this vector.}
 
@@ -95,11 +98,12 @@ Transactions on Pattern Analysis and Machine Intelligence, 17, 790-799.
 
 Einbeck, J. (2011). Bandwidth selection for mean-shift based
 unsupervised learning techniques: a unified approach via
-self-coverage.  Journal of Pattern Recognition Research, to appear.
+self-coverage.  Journal of Pattern Recognition Research 6, 175-192. 
 }
 
 \author{
-  JE, with contributions by M. Zayed.
+  J. Einbeck. See \code{\link{LPCM-package}} for further
+  acknowledgements. 
 }
 %\note{
 %
@@ -121,7 +125,6 @@ foo <- ms.self.coverage(faithful,gridsize= 10, taumin=0.1, taumax=0.5,
 h <- select.self.coverage(foo)$select
 fit <- ms(faithful,h=h[1])
 coverage(fit$data, fit$cluster.center)
-Rc(fit$data, fit$cluster.center[fit$closest.label,], type="points")
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

@@ -15,8 +15,8 @@ lpc.spline(lpcobject, optimize = TRUE, compute.Rc=FALSE,
 
 
 \arguments{
-  \item{lpcobject}{Object of class lpc.}
-  \item{optimize}{Boolean. If TRUE, optimize is used to find the point on the curve with minimum distance. Otherwise, data points are only projected onto the closest knot.}
+  \item{lpcobject}{Object of class \code{lpc}.}
+  \item{optimize}{Boolean. If TRUE, \code{optimize} is used to find the point on the curve with minimum distance. Otherwise, data points are only projected onto the closest knot.}
   \item{compute.Rc}{Boolean. If TRUE, the goodness-of-fit measure
   \eqn{R_C}{R_c} suggested in [1] is computed  and returned (using the scaled data, if \code{scaled=TRUE} in \code{lpcobject}).  }
   \item{project}{Boolean. If TRUE, projections onto curve are computed.}
@@ -71,7 +71,7 @@ if the data set is large!
 data(gvessel)
 gvessel.lpc <- lpc(gvessel[,c(2,4,5)],   h=0.11,  x0=c(35, 1870, 6.3))
 gvessel.spline  <- lpc.spline(gvessel.lpc)
-plot(gvessel.spline)
+plot(gvessel.spline, lwd=2)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

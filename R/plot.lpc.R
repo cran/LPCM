@@ -54,9 +54,7 @@ plot.lpc <- function(x, type, unscale=TRUE, lwd=1, datcol="grey60",   datpch=21,
   }
    
   if (lpcobject$scaled && unscale){
-        #u      <- if (is.null(splineobject)) {lpc.unscale(lpcobject)} else  {lpc.unscale(lpcobject,splineobject)}
-        u       <- if (is.null(splineobject)) {lpc.unscale(lpcobject)} else  {lpc.unscale(splineobject)}
-        #u <-  lpc.unscale(lpcobject,splineobject)
+        u       <- if (is.null(splineobject)) {unscale(lpcobject)} else  {unscale(splineobject)}
         Xi      <- u$data
         fit     <- u$LPC
         start   <- u$starting.points
@@ -168,7 +166,13 @@ if (d==2){
    
    
 }  else if (d<=16){
-        pairs(fit, panel= if ("curve" %in%  type) "lines" else "points", labels= dimnames(lpcobject$data)[[2]])
+        pairs(fit,
+              panel= if ("curve" %in%  type) "lines" else "points",
+              labels= dimnames(lpcobject$data)[[2]],
+              lwd=lwd,
+              col=curvecol,
+              ...
+              )
   
   #X11()
   #require(lattice)

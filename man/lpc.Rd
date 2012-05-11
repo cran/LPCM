@@ -37,7 +37,7 @@ bandwidth. May be either specified as a single number, then the same bandwidth i
     starting point, or in form of a vector, where starting points are
     read in consecutive order from the entries of the vector. 
     The starting point has always to be specified on the original data
-    scale, even if \code{scaled=TRUE}. A fixed  number of starting
+    scale, even if \code{scaled=TRUE}.  A fixed  number of starting
     points can be enforced through option \code{mult} in \code{lpc.control}.
    }
   

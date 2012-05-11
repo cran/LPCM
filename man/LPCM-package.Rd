@@ -43,7 +43,7 @@ Einbeck, Evers & Powell (2010), is in preparation.
 \tabular{ll}{
 Package: \tab LPCM\cr
 Type: \tab Package\cr
-License: \tab GPL 2.0 or newer.\cr
+License: \tab GPL (>=2)\cr
 LazyLoad: \tab yes\cr
 }
 }
@@ -64,7 +64,7 @@ Maintainer: Jochen Einbeck <jochen.einbeck@durham.ac.uk>
 }
 
 \references{
-Einbeck, J., Tutz, G., & Evers, L. (2005), Local principal curves, Statistics and Computing 15, 301-313.
+Einbeck, J., Tutz, G., & Evers, L. (2005): Local principal curves, Statistics and Computing 15, 301-313.
 
 Einbeck, J., Evers, L., & Powell, B. (2010): Data compression and regression through local principal curves and surfaces, International Journal of Neural Systems, 
 20, 177-192.

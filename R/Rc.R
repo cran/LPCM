@@ -41,7 +41,7 @@ base.Rc <-function(data,  closest.coords,   type="curve"){
     # Ac<- weighted.mean( abs(all.dist), w=weights)/weighted.mean(abs(pc.dist), w=weights)
   } else if (type=="points"){
      m.dist <- rep(0, n)
-     m <- mean(as.data.frame(data))
+     m <- colMeans(as.data.frame(data))
      m.dist <- sqrt(d)* distancevector(data, m)   
      Ac <- mean(abs(all.dist))/mean(abs(m.dist))
      # Ac<-weighted.mean(abs(all.dist, w=weights)/weighted.mean(abs(m.dist), w=weights)

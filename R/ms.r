@@ -38,13 +38,14 @@ ms.rep <- function (X, x, h, plotms=1, thresh= 0.00000001, iter=200) {
           if (length(h) == 1) {
               h <- rep(h, d)
           }
+         
           for (j in 1: iter){
-            m     <- meanshift(X, x, h)
+           
+            m     <- meanshift(X, x, h)        
             M[j,] <- m
-            th[j] <- enorm(m-x)/enorm(x)
+            th[j] <- enorm(m-x)/enorm(x)          
             if (th[j]<thresh){
-                  s<-j; 
-                  #print("required threshold reached"); 
+                  s<-j;                 
                   break
                 }
             x     <- m

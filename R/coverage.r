@@ -41,7 +41,7 @@ coverage.raw <-function(X, vec, tau, weights=1, plot.type="p", print=FALSE, labe
 
 coverage<-function(X, vec,  taumin=0.02, taumax,  gridsize=25, weights=1, plot.type="o", print=FALSE,...){
   if (missing(taumax)){
-  m <-mean(X)
+  m <-colMeans(X)
   Xm <- sweep(X, 1, m, "-")
   Xs<- apply(X,1, sd)
   taumax<-max(Xs)
@@ -88,7 +88,7 @@ lpc.coverage<-function(object, taumin=0.02, taumax, gridsize=25,  quick=TRUE, pl
     
    if (missing(taumax)){   
       if (scaled){taumax<-0.5} else {
-         m <-mean(X)
+         m <-colMeans(X)
          Xm <- sweep(X, 2, m, "-")
          Xs<- apply(X,2, sd)
         taumax<-max(Xs)
@@ -119,12 +119,24 @@ function (X, taumin = 0.02, taumax = 0.5, gridsize = 25, x0=1,
     Xi <- as.matrix(X)
     N <- dim(Xi)[1]
     d <- dim(Xi)[2]
-    mult <- control$mult; ms.h<-control$ms.h; ms.sub<-control$ms.sub        
-
+    
     s1       <- apply(Xi, 2, function(dat){ diff(range(dat))})  # range
+    
+    mult <- control$mult
+   
+    if (length(x0)==1){
+       ms.sub<-control$ms.sub
+       if (!is.null(control$ms.h)){
+          ms.h<-control$ms.h
+       } else {
+          if (!scaled){ms.h   <- s1/10} else {ms.h<- 0.1}
+       }   
+    }    
+
+   
     if (length(x0)==1 && x0==1){   
       n  <- sample(N,1);
-      X  <-  if (scaled){ sweep(Xi, 2, s1, "/")} else {Xi}
+      X  <-  if (scaled){ sweep(Xi, 2, s1, "/")} else {Xi}     
       x0 <- matrix(ms.rep(X, X[n,],ms.h, plotms=0)$final, nrow=1)
       x0 <- if (scaled) x0*s1 else x0   # unscales again
       rm(X)

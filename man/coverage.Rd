@@ -109,10 +109,11 @@ the minimum coverage \code{smin} is to be modified). The component
 of strength of evidence provided by the self-coverage criterion (the
 best bandwidth comes first, etc.). A plot is produced as a by-product,
 which symbolizes the best bandwidth by a thick solid line, the
-second-best by a dashed line, and the third-best by a dotted line. See
-Einbeck (2011) for details.
+second-best by a dashed line, and the third-best by a dotted line. It is
+recommended to run the self-coverage functions with fixed starting
+points, as in the examples below.
 
-Note that the original publication by Einbeck, Tutz, and Evers (2005) uses `quick' coverage curves.
+See Einbeck (2011) for details. Note that the original publication by Einbeck, Tutz, and Evers (2005) uses `quick' coverage curves.
 
 }
 

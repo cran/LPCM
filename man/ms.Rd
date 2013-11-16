@@ -29,13 +29,13 @@ ms.self.coverage(X, taumin=0.02, taumax=0.5, gridsize=25,
 
 \arguments{
   \item{X}{data matrix.}
-  \item{h}{bandwidth.}
+  \item{h}{bandwidth (by default, 10 percent of the data range).}
   \item{x}{point from which we wish to shift to the local mean.}
   \item{subset}{vector specifying a subset of 1:n, where n is the sample
   size. This allows to run the iterative mean shift procedure only
   from a subset of points (if unspecified, 1:n is used here,
   i.e. each data point serves as a starting point).} 
-\item{scaled}{logical.}
+\item{scaled}{logical (if TRUE, each variable is divided by its range).}
   \item{taumin,taumax,gridsize}{determine the grid of bandwidths to
     investigate.}
   \item{thresh, iter}{mean shift iterations are stopped when the
@@ -120,11 +120,19 @@ self-coverage.  Journal of Pattern Recognition Research 6, 175-192.
 
 \examples{
 data(faithful)
-foo <- ms.self.coverage(faithful,gridsize= 10, taumin=0.1, taumax=0.5,
-    plot.type="o")    # need higher gridsizes in practice!
-h <- select.self.coverage(foo)$select
-fit <- ms(faithful,h=h[1])
+# Mean shift clustering with user-defined bandwidth (5 percent of data range)
+fit <- ms(faithful, h=0.05)
+
+# Goodness-of-fit
 coverage(fit$data, fit$cluster.center)
+Rc(fit)
+
+# Bandwidth selection via self-coverage
+\dontrun{foo <- ms.self.coverage(faithful,gridsize= 50, taumin=0.1,
+taumax=0.5, plot.type="o")   
+h <- select.self.coverage(foo)$select
+fit <- ms(faithful,h=h[1])}
+
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

@@ -1,4 +1,4 @@
-c35012c65dc7b728a4c86542832310f5 *DESCRIPTION
+acf8cda1c72f8bac32466ea3766bc23b *DESCRIPTION
 f3e8448673052b726b03a95cba1cd28c *NAMESPACE
 aa78b60551cb82883ca7fd74a011658c *R/Rc.R
 a6ed104268ede5cfeb7b4b5c643d152e *R/coverage.r
@@ -13,13 +13,13 @@ a888c5c4449b1d549162dee42de12820 *R/lpc.control.R
 8e62184f76798a30521af37a1f996d1d *R/lpc.spline.R
 ee528c5fa00fedb989d63b5b57ee6c77 *R/lpc.spline.eval.R
 0d1da964a91078861de58181f153ee30 *R/lpc.splinefun.R
-a3888adb7f679677ae603d08d30f858a *R/ms.r
+1bfab3a6161192666badd05bc4bdd7af *R/ms.r
 459958850b17852a215d738535c1ae70 *R/plot.lpc.R
 1f80c534eacc5e60a9d063e0be8c002e *R/print.lpc.R
 f937682729c630168a17f4147296a6f8 *R/unscale.R
-5acca71c38c4764ffcb20e6f9eaff1c4 *data/calspeedflow.rda
-f220056167346895368cea0468cf5a0c *data/gaia.rda
-e0144295b10fa32d51ffaefd60b6a5c4 *data/gvessel.rda
+3e2f9e216019c62014e80ee33750827e *data/calspeedflow.rda
+259712f7f14f9aa2a2611628b4cb1aa3 *data/gaia.rda
+f23cd3f629dbe832007148d102754699 *data/gvessel.rda
 10315bdaa94fe525003d0ec5a9b21236 *man/LPCM-package.Rd
 7c0aacc322cf741d107798056e3a2d8e *man/Rc.Rd
 78eecb1807989863520e4158347d0a22 *man/calspeedflow.Rd
@@ -33,7 +33,7 @@ c4e739e6adb882d0c2aad569d5ff3f62 *man/lpc.Rd
 ba5ab7a278ee37172a4dcab0801500a4 *man/lpc.project.Rd
 70a44dac6c611c119595fc97e3127c2d *man/lpc.spline.Rd
 f75904f779a8c05cd3064ca25117e175 *man/lpc.splinefun.Rd
-a5a5546f84b99ca8fe36c503d1324919 *man/ms.Rd
+08e950bcae65615850037d5611326547 *man/ms.Rd
 eeb1cf9a1da943d13235f88fea910307 *man/plot.lpc.Rd
 d5a44db246c9882031c563a3a56bccad *man/print.lpc.Rd
 4ac23b5c179894a0f1fad92dc96c1a63 *man/unscale.Rd

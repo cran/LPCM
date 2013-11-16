@@ -156,6 +156,9 @@ function (X, taumin = 0.02, taumax = 0.5, gridsize = 25, thr = 0.0001,
     scaled = TRUE, cluster = FALSE,  plot.type = "o", or.labels = NULL, print=FALSE, 
     ...) 
 {
+
+    if (gridsize <10){stop("The minimum gridzise is 10.")} 
+  
     X <- as.matrix(X)
     if ((!scaled) && taumax < 1) {
         warning("Please adjust the range (taumin, taumax) of tube widths by hand, as the data are not scaled.")

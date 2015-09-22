@@ -11,7 +11,7 @@ Internal function of package \pkg{LPCM} called by \code{lpc}. Do not use!
 \usage{
 followx(Xi, x0, h, t0, iter, way, weights, pen = 2, phi = 1,
     lasteigenvector = 0, rho0 = 0.4, boundary=0.005,
-    convergence.at= 0.000001, cross=FALSE)
+    convergence.at= 0.000001, cross=TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

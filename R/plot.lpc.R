@@ -118,8 +118,8 @@ if (d==2){
    
 } else if (d==3){
   
-   require(scatterplot3d)
-   plotlpc3 <- scatterplot3d(Xi, color=datcol, pch=datpch,...)
+   #require(scatterplot3d)
+   plotlpc3 <- scatterplot3d::scatterplot3d(Xi, color=datcol, pch=datpch,...)
    if ("curve" %in% type){ 
          for (j in 0:(nbranch-1)){ 
              plotlpc3$points3d(fit[branch==j,], lwd=lwd, col=if (lc>=nbranch) curvecol[j+1] else if (lc>1) rep(curvecol,ceiling(nbranch/lc))[j+1] else curvecol, type="l")

@@ -71,7 +71,8 @@ kern <- function(y, x = 0, h = 1){
 
 # Multivariate kernel 
 kernd <- function(X,x,h){
-   if (!is.matrix(X)){ X<- matrix(x, nrow=1)}
+   if (!is.matrix(X) && !is.data.frame(X)){ X<- matrix(X, nrow=1)}
+   x<-as.numeric(x)
    d<-length(x)
    k<-1
    for (j in 1:d){k<- k* kern(X[,j],x[j],h[j])}

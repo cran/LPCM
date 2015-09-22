@@ -21,9 +21,12 @@ lpc.control(iter =100, cross=TRUE,
   \item{iter}{
 Maximum number of iterations on either side of the starting point within each branch.
 }
- \item{cross}{Logical parameter. If TRUE, curves are stopped when they
-    come too close to an existing branch. Used in the self-coverage function. 
- }
+ \item{cross}{Logical parameter. If \code{FALSE}, a curve is stopped when it
+   comes too close to an another part of itself. Note: Even when
+   \code{cross=FALSE}, different branches of the curve (for higher depth
+   or multiple starting points) are still allowed
+   to cross. This option only avoids crossing of each particular branch
+   with itself. Used in the self-coverage functions to avoid overfitting. }
   \item{boundary}{
 This boundary correction [2] reduces the bandwidth adaptively once the
 relative difference of parameter values between two centers of mass

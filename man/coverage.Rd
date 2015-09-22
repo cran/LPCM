@@ -137,11 +137,12 @@ J. Einbeck
 
 \examples{
 data(gvessel)
-gvessel.self <-lpc.self.coverage(gvessel[,c(2,4,5)], x0=c(35, 1870,
+\dontrun{gvessel.self <-lpc.self.coverage(gvessel[,c(2,4,5)], x0=c(35, 1870,
 6.3), print=FALSE, plot.type=0)
 h <- select.self.coverage(gvessel.self)$select
 gvessel.lpc <- lpc(gvessel[,c(2,4,5)], h=h[1],  x0=c(35, 1870, 6.3))
 lpc.coverage(gvessel.lpc, gridsize=10, print=FALSE)
+}
 
 data(calspeedflow)
 fitms <- ms(calspeedflow[,3:4])

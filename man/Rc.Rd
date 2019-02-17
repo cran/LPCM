@@ -82,20 +82,14 @@ Pattern Recognition Research  6, 175-192.
 }
 
 \author{
-J. Einbeck and L. Evers.
+J. Einbeck.
 }
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
-\section{Acknowledgements}{
- Contributions (in form of pieces of code, or useful suggestions for
- improvements) by Jo Dwyer, Mohammad Zayed, and
- Ben Oakley are gratefully acknowledged.
-}
-
 
 \seealso{
-\code{\link{lpc.spline}}, code{\link{ms}}, \code{\link{coverage}}.
+\code{\link{lpc.spline}}, \code{\link{ms}}, \code{\link{coverage}}.
 }
 
 \examples{
@@ -105,10 +99,12 @@ Rc(lpc1)
 # is the same as:
 base.Rc(lpc1$lpcobject$data, lpc1$closest.coords)
 
-ms1 <- ms(calspeedflow[,3:4],plotms=0)
+\dontrun{
+ms1 <- ms(calspeedflow[,3:4], plot=FALSE)
 Rc(ms1)
 # is the same as:
 base.Rc(ms1$data, ms1$cluster.center[ms1$closest.label,], type="points")
+}
 }
 
 

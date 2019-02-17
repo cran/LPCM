@@ -107,7 +107,7 @@ lpc.coverage<-function(object, taumin=0.02, taumax, gridsize=25,  quick=TRUE, pl
 
 lpc.self.coverage <-
 function (X, taumin = 0.02, taumax = 0.5, gridsize = 25, x0=1, 
-    way = "two", scaled = TRUE, weights = 1, pen = 2, 
+    way = "two", scaled = 1, weights = 1, pen = 2, 
     depth = 1, control = lpc.control(boundary = 0, cross = FALSE), 
     quick = TRUE, plot.type = "o", print = FALSE, ...) 
     {
@@ -120,24 +120,29 @@ function (X, taumin = 0.02, taumax = 0.5, gridsize = 25, x0=1,
     N <- dim(Xi)[1]
     d <- dim(Xi)[2]
     
+    mult <- control$mult
+    
+    if (!(scaled %in% c(0,1)) ){
+      warning("Deviating from the user specification, data have been scaled by their range.")
+      scaled<-1
+    }
+    
     s1       <- apply(Xi, 2, function(dat){ diff(range(dat))})  # range
     
-    mult <- control$mult
-   
     if (length(x0)==1){
        ms.sub<-control$ms.sub
        if (!is.null(control$ms.h)){
           ms.h<-control$ms.h
-       } else {
-          if (!scaled){ms.h   <- s1/10} else {ms.h<- 0.1}
-       }   
-    }    
-
-   
+       } else { 
+         if (!scaled){ms.h   <- s1/10} else {ms.h<- 0.1}
+      } 
+    }
+    #print(ms.h)
+        
     if (length(x0)==1 && x0==1){   
       n  <- sample(N,1);
-      X  <-  if (scaled){ sweep(Xi, 2, s1, "/")} else {Xi}     
-      x0 <- matrix(ms.rep(X, X[n,],ms.h, plotms=0)$final, nrow=1)
+      X  <-  if (scaled>0){ sweep(Xi, 2, s1, "/")} else {Xi}     
+      x0 <- matrix(ms.rep(X, X[n,],ms.h)$final, nrow=1)
       x0 <- if (scaled) x0*s1 else x0   # unscales again
       rm(X)
      }  else if (length(x0)==1 && x0==0 ){
@@ -148,7 +153,7 @@ function (X, taumin = 0.02, taumax = 0.5, gridsize = 25, x0=1,
               #print(Nsub)
               sub <- sample(1:N, Nsub)
           }
-          x0<- suppressWarnings(unscale(ms(Xi, ms.h, subset=sub, plotms=0, scaled=scaled)))$cluster.center
+          x0<- suppressWarnings(unscale(ms(Xi, ms.h, subset=sub, plot=FALSE, scaled=scaled)))$cluster.center
      }  else {
         if (is.null(x0)){
              if (is.null(mult)){stop("One needs to allow for at least one starting point.")}
@@ -156,7 +161,9 @@ function (X, taumin = 0.02, taumax = 0.5, gridsize = 25, x0=1,
         } else {    
              x0 <- matrix(x0, ncol=d, byrow=TRUE)
         }   
-    } 
+     }
+    
+   
     if(!is.null(control$mult)){
      #  stop("It is not permitted to modify mult for this operation.")
       if (dim(x0)[1] < mult) {n <- runif(mult-dim(x0)[1],1,N+1)%/%1; x0 <- rbind(x0,Xi[n,])} #
@@ -164,21 +171,23 @@ function (X, taumin = 0.02, taumax = 0.5, gridsize = 25, x0=1,
     }
     x0       <- as.matrix(x0)    # putting in matrix format; just in case....
 
-    #print(x0)
-    if ((!scaled) && taumax < 1) {
+   if ((!scaled) && taumax < 1) {
         warning("Please adjust the range (taumin, taumax) of tube widths by hand, as the data are not scaled.")
     }
     Pm <- NULL
     h0 <- taumin
     h1 <- taumax
     h <- seq(h0, h1, length = gridsize)
+    #print(h)
     #n <- gridsize
     cover <- matrix(0, gridsize, 2)
+    
     for (i in 1:gridsize) {
         new.h0 <- h[i]
         fit <- lpc(Xi, h = new.h0, t0 = new.h0, x0 = x0,
             way = way, scaled = scaled, weights = weights, pen = pen, 
             depth = depth, control)
+       
         if (!quick) {
             fit.spline <- lpc.spline(fit, project = TRUE)
         }
@@ -192,7 +201,7 @@ function (X, taumin = 0.02, taumax = 0.5, gridsize = 25, x0=1,
             new.h0, weights, plot.type = 0, print = print)[1:2])
     }
 
-   
+  
     select <- select.self.coverage(self = cover,  
         smin = 2/3, plot.type = plot.type)
     result <- list(self.coverage.curve = cover, select = select, x0.unscaled=suppressWarnings(unscale(fit))$start,
@@ -200,6 +209,54 @@ function (X, taumin = 0.02, taumax = 0.5, gridsize = 25, x0=1,
     class(result) <- "self"
     result
 }
+
+
+# Mean shift clustering bandwidth selection
+ms.self.coverage <-
+  function (X, taumin = 0.02, taumax = 0.5, gridsize = 25, thr = 0.001, 
+            scaled = 1, cluster = FALSE,  plot.type = "o", print=FALSE, 
+            ...) 
+  {
+    
+    if (gridsize <10){stop("The minimum gridzise is 10.")} 
+    
+    X <- as.matrix(X)
+    if ((!scaled) && taumax < 1) {
+      warning("Please adjust the range (taumin, taumax) of tube widths by hand, as the data are not scaled.")
+    }
+    if (!(scaled %in% c(0,1)) ){
+      warning("Deviating from the user specification, data have been scaled by their range.")
+      scaled<-1
+    }
+    Pm <- NULL
+    h0 <- taumin
+    h1 <- taumax
+    h <- seq(h0, h1, length = gridsize)
+    n <-dim(X)[1]
+    cover <- matrix(0, gridsize, 2)
+    for (i in 1:gridsize) {
+      new.h0 <- h[i]
+      fit <- ms(X, new.h0,  thr = thr, scaled = scaled, plot=FALSE)
+      #set <-   sample(n,n %/% (1/draw))
+      #find <- as.numeric(names(table(fit$cluster.label[set])))
+      find <- as.numeric(which(table(fit$cluster.label)>2))  # changed 23/05/11
+      Pm[[i]] <- fit$cluster.center[find,] 
+      if (!is.matrix(Pm[[i]])){Pm[[i]]<- matrix(Pm[[i]],nrow=1, dimnames=list(dimnames(fit$cluster.center)[[1]][find] ,NULL))}
+      if (!cluster) {   
+        cover[i, ] <- as.numeric(coverage.raw(fit$data, Pm[[i]],  new.h0, plot.type = 0, print=print)[1:2])
+      } else {
+        cover[i, ] <- as.numeric(coverage.raw(fit$data, Pm[[i]], new.h0, plot.type = 0, label = fit$cluster.label, print=print)[1:2])
+      }
+      
+    }
+    select <- select.self.coverage(self = cover, 
+                                   smin = 1/3, plot.type = plot.type)
+    result <- list(self.coverage.curve = cover, select = select, 
+                   type = "ms")
+    class(result) <- "self"
+    result
+  }
+
 
 
 select.self.coverage <-
@@ -240,6 +297,10 @@ function (self,  smin, plot.type = "o", plot.segments=NULL)
         }
     }
              
+    if (is.null(select.2diff)){
+        if(is.null(select.2diff))  stop("No optimal bandwidth has been found", call.=FALSE)
+   }
+    
     selected <-select[order(select.2diff)]
     covered<- select.coverage[order(select.2diff)]          
     

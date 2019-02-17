@@ -1,10 +1,11 @@
 \name{plot.lpc}
 \alias{plot.lpc}
 \alias{plot.lpc.spline}
+\alias{plot.ms}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{ Plotting local principal curves}
+\title{Plotting local principal curves and mean shift trajectories}
 \description{
-  Takes an object of class \code{lpc} or \code{lpc.spline} and plots any subset of the following components of the local principal curve:  Centers of mass; the curve connecting the local centers of mass; the cubic spline representation of the curve; the projections onto the curve; the starting points.
+Takes an object of class \code{lpc}, \code{lpc.spline} or \code{ms}. In the case of principal curves, it plots any subset of the following components of the local principal curve:  Centers of mass; the curve connecting the local centers of mass; the cubic spline representation of the curve; the projections onto the curve; the starting points. For the mean shift procedure, it produces a plot of mean shift trajectories and cluster centers. 
 }
 \usage{
 \method{plot}{lpc}(x, type, unscale = TRUE, lwd = 1, datcol = "grey60", 
@@ -13,17 +14,19 @@
 \method{plot}{lpc.spline}(x, type, unscale = TRUE, lwd = 1, datcol = "grey60", 
     datpch = 21, masscol = NULL, masspch = 15, curvecol = 1, splinecol = 3, 
     projectcol = 4, startcol = NULL,  startpch=NULL,...)
+\method{plot}{ms}(x, unscale=FALSE, lwd=1, datcol="grey70",   datpch=21, masscol=NULL, 
+    masspch=15, curvecol=NULL, ...)    
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{an object of class \code{lpc} or \code{lpc.spline}.   }
-  \item{type}{a vector of type \code{c("mass", "spline",...)} with possible entries \code{mass, curve, spline, project, start.}}
-  \item{unscale}{if TRUE, then data (and all fitted componens) are scaled back to their original scale; otherwise the scaled data are plotted (only relevant if \code{scaled=TRUE}  in the fitted object). }
-  \item{lwd}{width of curves.}
+  \item{type}{a vector of type \code{c("mass", "spline",...)} with possible entries \code{mass, curve}, \code{spline, project, start.}}
+  \item{unscale}{if TRUE, then data (and all fitted componens) are scaled back to their original scale; otherwise the scaled data are plotted (only relevant if \code{scaled=TRUE}  in the fitted object). For \code{ms}, this is currently unimplemented.}  
+  \item{lwd}{width of principal curves or trajectories.}
   \item{datcol}{color of data points.}
   \item{datpch}{plotting symbol for data points.}
-  \item{masscol}{color of centers of mass (see below).  }
-  \item{masspch}{plotting symbol for centers of mass.}
+  \item{masscol}{color of centers of mass (see below) or cluster centers.  }
+  \item{masspch}{plotting symbol for centers of mass or cluster centers.}
   \item{curvecol}{color of the curve interpolating the local centers of mass (this is the "local principal curve"!).}
   \item{splinecol}{color of the spline representation of the local principal curve.} 
   \item{projectcol}{color of projections onto the spline representation of the local principal curve.}
@@ -37,12 +40,12 @@ of starting points.}
 % Plots a local principal curve  
 %}
 \value{
-A 2D plot, 3D plot, or a pairs plot (depending on the data dimension \eqn{d}.).
+A 2D plot, 3D plot, or a pairs plot (depending on the type of object and the data dimension \eqn{d}.).
 
 The most flexible plotting option is \code{masscol}. Depending on the
 length of the specified vector, this will be interpreted differently. If
 a scalar is provided, the corresponding color will be given to all centers of
-mass. If the length of the vector is larger than 1, then this option
+mass (or cluster centers). For LPCs, if the length of the vector is larger than 1, then this option
 will assign different colours to  different depths, or different branch
 numbers, or to individual data points, depending on the length. The
 default setting is assigning colours according to depth, in the order
@@ -67,14 +70,20 @@ Einbeck, J., Evers, L. & Hinchliff, K. (2010):  Data compression and regression 
 
 \author{ JE }
 \seealso{ 
-\code{\link{lpc}}, \code{\link{lpc.spline}}  
+\code{\link{lpc}}, \code{\link{lpc.spline}}  , \code{\link{ms}}  
 }
 
 \examples{
 data(calspeedflow)
 lpc1 <- lpc(calspeedflow[,3:4])
 plot(lpc1, type=c("spline","project"), lwd=2)
-}
+ms1<- ms(calspeedflow[,3:4], plot=FALSE)
+plot(ms1, masscol=1)
+plot(ms1, curvecol="grey30")
 
+data(mussels, package="dr")
+ms2 <- ms(mussels[,-3], scaled=1, h=0.1, plot=FALSE)
+plot(ms2, datpch=20, masspch=24)
+}
 %\keyword{ smooth}% at least one, from doc/KEYWORDS
 \keyword{multivariate}% __ONLY ONE__ keyword per line

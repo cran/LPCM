@@ -91,8 +91,8 @@ A list of the nine specified imput parameters, which can be read by the
 \references{
 [1] Einbeck, J., Tutz, G. & Evers, L. (2005): Exploring Multivariate Data Structures with Local Principal Curves. In: Weihs, C. and Gaul, W. (Eds.): Classification - The Ubiquitous Challenge. Springer, Heidelberg, pages 256-263. 
 
-[2] Einbeck, J. and Zayed, M. (2011). Some asymptotics for localized
-principal components and curves. Working paper, Durham University. Unpublished.
+[2] Einbeck, J. and Zayed, M. (2014). Some asymptotics for localized
+principal components and curves. Communications in Statistics - Theory and Methods 43, 1736-1749.
 }
 
 \author{
@@ -102,7 +102,7 @@ JE
 
 \examples{
 data(calspeedflow)
-fit1 <- lpc(calspeedflow[,c(3,4)], x0=c(50,60),scaled=TRUE,
+fit1 <- lpc(calspeedflow[,c(3,4)], x0=c(50,60),scaled=1,
    control=lpc.control(iter=20, boundary=0))
 plot(fit1, type=c("curve","start","mass"))
 }

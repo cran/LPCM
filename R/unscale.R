@@ -46,7 +46,7 @@ unscale.lpc <-function(x,...){
     }
        }
 
-      if (!is.null(splineobject) && splineobject$closest.coords!="none" ){ 
+      if (!is.null(splineobject) && splineobject$closest.coords[1]!="none" ){ 
             closest.coords <- sweep(splineobject$closest.coords,2, lpcobject$Misc$scaled.by , "*")
       }
       

@@ -1,55 +1,48 @@
 \name{ms}
-\Rdversion{1.1}
+\Rdversion{1.2}
 \alias{ms}
 \alias{meanshift}
 \alias{ms.rep}
-\alias{ms.self.coverage}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Mean shift clustering.
 }
 \description{
-Functions for mean shift, iterative mean shift,  mean shift clustering,
-and bandwidth selection for mean shift clustering (based on
-self-coverage). The main function is \code{ms} which, for a given
-bandwidth, detects the local modes (`local principal points') and performs the clustering.
+Functions for mean shift, iterative mean shift,  and mean shift clustering.
+The main function is \code{ms} which, for a given bandwidth, detects the local modes 
+(`local principal points') and performs the clustering.
 
-These  functions implement the techniques presented in Einbeck (2011).
+These  functions implement the mean shift techniques presented in Einbeck (2011).
 }
 
 \usage{
 meanshift(X, x, h)
-ms.rep(X, x, h, plotms=1, thresh= 0.00000001, iter=200)
-ms(X, h, subset,  thr=0.0001, scaled= TRUE, iter=200, plotms=2,
-       or.labels=NULL, ...)
-ms.self.coverage(X, taumin=0.02, taumax=0.5, gridsize=25,
-       thr=0.0001, scaled=TRUE, cluster=FALSE, plot.type="o", 
-       or.labels=NULL, print=FALSE, ...)
+ms.rep(X, x, h, thresh= 0.000001, iter=200)
+ms(X, h, subset,  thr=0.001, scaled= 1, iter=200, plot=TRUE, ...)
 }
 
 \arguments{
   \item{X}{data matrix.}
-  \item{h}{bandwidth (by default, 10 percent of the data range).}
+  \item{h}{scalar or vector-valued bandwidth (by default, 5 percent of
+  the  data range, or 20 percent of the standard deviation, respectively, in each direction). If set manually and \code{scaled>0}, this
+  bandwidth needs to be set on the scaled scale; for instance setting
+  \code{scaled=1} and \code{h=0.10} will use a bandwidth of \eqn{10\%} of the data range in either direction. }
   \item{x}{point from which we wish to shift to the local mean.}
   \item{subset}{vector specifying a subset of 1:n, where n is the sample
   size. This allows to run the iterative mean shift procedure only
   from a subset of points (if unspecified, 1:n is used here,
   i.e. each data point serves as a starting point).} 
-\item{scaled}{logical (if TRUE, each variable is divided by its range).}
-  \item{taumin,taumax,gridsize}{determine the grid of bandwidths to
-    investigate.}
-  \item{thresh, iter}{mean shift iterations are stopped when the
+\item{scaled}{if equal to 1, each variable is divided by its range, and if equal to 2 (or any other positive value other than 1), each variable is divided by its standard deviation.}
+   \item{thresh, iter}{mean shift iterations are stopped when the
   mean shift length (relative to the length of \code{x}) falls below
       \code{thresh}, or  after \code{iter} iterations (whatever event
   happens first).} 
   \item{thr}{adjacent mean shift clusters are merged if their relative
   distance falls below this threshold.}
-  \item{cluster}{if \code{TRUE}, distances are always measured to the
-    cluster to which an observation is assigned, rather than to the
-    nearest cluster.}
-  \item{plotms, plot.type, or.labels, ...}{graphical parameters.}
-  \item{print}{if TRUE, coverage values are printed on the screen as soon as
-  computed. This is quite helpful especially if \code{gridsize} is large.} 
+  \item{plot}{if equal to 0, then no plotted output. For bivariate
+  data, \code{plot=1} gives by default a dynamically created color plot showing the mean
+  shift trajectories and the resulting clustering.} 
+  \item{...}{further graphical parameters.}
 }
 
 \details{
@@ -84,7 +77,7 @@ reduced by \eqn{80\%}{80\%} (compared to the distances to the overall mean).
   \item{closest.label}{assigns each data point to the closest cluster
   center in terms of Euclidean distance.}
 \item{data}{the data frame (scaled if \code{scaled=TRUE}).}
-\item{scaled}{boolean.}
+\item{scaled}{the user-supplied value, could be boolean or numerical.}
 \item{scaled.by}{the data were scaled by dividing each variable through
   the values provided in this vector.}
 
@@ -105,9 +98,13 @@ self-coverage.  Journal of Pattern Recognition Research 6, 175-192.
   J. Einbeck. See \code{\link{LPCM-package}} for further
   acknowledgements. 
 }
-%\note{
-%
-%}
+\note{
+All values provided in the output refer to the scaled data, unless \code{scaled=0} or (equivalently) \code{scaled=FALSE}. 
+
+The default option \code{scaled=1} or  \code{scaled=TRUE}  scales the data by dividing each variable through their range (differing from the scaling through the standard deviation as common e.g. for  PCA).  All other settings  \code{scaled>0} will scale the data by their standard deviation.
+
+If \code{scaled=1} or if no scaling is applied, then the default bandwidth setting is 5 percent of the data range in each direction. If the data are scaled through the standard deviation, then the default setting is 20 percent of the standard deviation in each direction. 
+}
 
 %\section{Warning}{
 %
@@ -115,25 +112,14 @@ self-coverage.  Journal of Pattern Recognition Research 6, 175-192.
 
 
 \seealso{
-\code{\link{Rc}}, \code{\link{lpc.self.coverage}}
+\code{\link{Rc}}, \code{\link{plot.ms}}
 }
 
 \examples{
 data(faithful)
-# Mean shift clustering with user-defined bandwidth (5 percent of data range)
-fit <- ms(faithful, h=0.05)
-
-# Goodness-of-fit
-coverage(fit$data, fit$cluster.center)
-Rc(fit)
-
-# Bandwidth selection via self-coverage
-\dontrun{foo <- ms.self.coverage(faithful,gridsize= 50, taumin=0.1,
-taumax=0.5, plot.type="o")   
-h <- select.self.coverage(foo)$select
-fit <- ms(faithful,h=h[1])}
-
-}
+# Mean shift clustering with default bandwidth (5 percent of data range)
+ms(faithful)
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
+}
 \keyword{multivariate}% __ONLY ONE__ keyword per line

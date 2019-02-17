@@ -26,3 +26,30 @@ print.lpc <-
 
 
 print.lpc.spline <-print.lpc
+
+print.ms <-
+  function(x, digits=max(3,getOption('digits')-3), ...){
+    
+    sx <- as.character(substitute(x))
+    if (sum(nchar(sx))>200){ sx<-"name.of.this.object"}
+    
+    cat("\n")
+    cat("Type plot(", sx, ") to see a graphical display of the fitted object. \n\n")
+    cat("Type names(", sx, ") to see an overview of items available. \n\n")
+    
+    if(class(x)=="ms"){
+      if (x$scaled){
+        cat("The data have been scaled by dividing through \n")
+        cat(x$scaled.by)
+        cat("\n")
+      } else {
+        cat("The data have not been scaled. \n")
+      }
+    }
+    
+  }    
+
+
+
+
+

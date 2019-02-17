@@ -1,6 +1,5 @@
 plot.lpc <- function(x, type, unscale=TRUE, lwd=1, datcol="grey60",   datpch=21, masscol=NULL, masspch=15, curvecol=1, splinecol=3, projectcol=4, startcol=NULL, startpch=NULL,...){
 
-     
    object <- x
    if (class(object)=="lpc.spline"){
        splineobject <- object
@@ -191,3 +190,55 @@ invisible()
 
 
 plot.lpc.spline <- plot.lpc
+
+
+plot.ms <- function(x, unscale=FALSE, lwd=1, datcol="grey70",   datpch=21, masscol=NULL, masspch=15, curvecol=NULL,   ...){
+  
+  # unscale: unimplemented
+  
+  object         <- x
+  cluster.center <- object$cluster.center
+  cluster.label  <- object$cluster.label
+  trajectories   <- object$all.trajectories
+  X              <- object$data  
+  Li             <- length(trajectories)
+  d              <- dim(X)[2] 
+  
+  
+  if (missing(masspch)){masspch<-15}
+  
+  if (d == 2) {
+    plot(as.matrix(X), col = datcol, pch=datpch,...)
+    if (missing(masscol)){
+      masscol<- 2:(dim(cluster.center)[1]+1)
+    }  
+    # else {
+    #   colvec <-  cluster.label[i]+1
+    #   points(cluster.center, pch = 15, col=colvec)
+    #   }
+    ccol<-NULL 
+    for  (i in 1:Li){
+      if (missing(curvecol)){
+        # print(i)
+        ccol <-  cluster.label[i]+1
+      } else {ccol<-curvecol} 
+      #print(curvecol)
+      lines(rbind(trajectories[[i]]$start, trajectories[[i]]$Meanshift.points),   col = ccol, lwd=lwd)
+      # } else if (plotms == 2) {
+      # lines(rbind(temp.ms$start, temp.ms$Meanshift.points), col = cluster.label[i] + 1)
+    }
+    points(cluster.center, pch = masspch, col=masscol)
+  } else if (d>2 && d<=16){
+    pairs(rbind(as.matrix(X), cluster.center), col = c(cluster.label +  1, rep(1, dim(cluster.center)[1])), 
+          pch = c(rep(datpch, dim(X)[1]), rep(masspch, dim(cluster.center)[1])), ...)
+    }  else {
+    cat("Data set has inadequate dimension to be plotted in a pairs plot.\n\n")
+  }
+  
+  invisible()
+  
+}
+
+
+
+

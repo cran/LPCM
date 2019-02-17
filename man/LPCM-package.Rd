@@ -7,9 +7,9 @@
 Local principal curve methods
 }
 \description{
-   Fitting multivariate data patterns with local principal curves;
-   including simple tools for data compression (projection), bandwidth
-   selection, and measuring goodness-of-fit.
+  Fitting multivariate data patterns with local principal curves,
+  including tools for data compression (projection) and measuring goodness-of-fit; 
+  with some additional functions for mean shift clustering.
 
    This package implements the techniques introduced in Einbeck, Tutz
    & Evers (2005), and successive related papers.
@@ -17,7 +17,7 @@ Local principal curve methods
    The main functions to be called by the user are
    \itemize{
    \item \code{\link{lpc}}, for the estimation of the local centers of mass
-   which make up the principal curve;
+   which describe the principal curve;
    \item \code{\link{lpc.spline}}, which is a smooth and fully parametrized
    cubic spline respresentation of the latter; 
    \item \code{\link{lpc.project}}, which enables to compress data by
@@ -29,14 +29,11 @@ Local principal curve methods
    of class \code{lpc} and \code{lpc.spline}. 
  }
 
-This package also contains some  code for density
+This package also contains some code for density
 mode detection (`local principal points') and  mean shift clustering (as well as bandwidth
 selection in this context), which implements the methods presented in
-Einbeck (2011). See the help file for \code{\link{ms}}.
-
-A second R package which will implement the extension of local principal
-curves to local principal surfaces and manifolds, as proposed in
-Einbeck, Evers & Powell (2010), is in preparation.
+Einbeck (2011). See the help file for \code{\link{ms}} for details. These functionalities have been
+substantially improved with version 0.46-0.
 
 }
 \details{

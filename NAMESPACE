@@ -23,5 +23,7 @@ S3method(unscale, lpc.spline)
 
 S3method(unscale, ms)
 
+S3method(plot, ms)
 
+S3method(print, ms)
 

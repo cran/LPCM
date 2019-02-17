@@ -9,7 +9,7 @@ Local principal curves
 This is the main function which computes the actual local principal curve, i.e. a sequence of local centers of mass.
 }
 \usage{
-lpc(X, h, t0 = mean(h),  x0,  way = "two",  scaled = TRUE,
+lpc(X, h, t0 = mean(h),  x0,  way = "two",  scaled = 1,
       weights=1, pen = 2, depth = 1, control=lpc.control())
 }
 %- maybe also 'usage' for other objects documented here.
@@ -19,10 +19,8 @@ data matrix with \eqn{N} rows (observations) and \eqn{d} columns (variables).
 }
   \item{h}{
 bandwidth. May be either specified as a single number, then the same bandwidth is used in
-    all dimensions, or as a d-dimensional bandwidth vector. The default
-    setting is 10 percent of the  range in each direction. If \code{scaled =TRUE} then the bandwidth has to be
-    specified in fractions of the data range, e.g. h= c(0.2,0.1), rather than
-    absolute values. 
+    all dimensions, or as a \eqn{d}-dimensional bandwidth vector. If the data are scaled, then the bandwidth has to be
+    specified in fractions of the data range or standard deviation, respectively, e.g. \code{scaled=1} and \code{h= c(0.2,0.1)} gives 20 percent of the range of the first variable and 10 percent of the range of the second variable.  If left unspecified, then default settings are invoked; see the `Notes' section below. 
 }
   \item{t0}{scalar step length. Default setting is \code{t0=h}, if \code{h} is a scalar, and \code{t0=mean(h)}, if \code{h} is a vector.
 }
@@ -37,7 +35,7 @@ bandwidth. May be either specified as a single number, then the same bandwidth i
     starting point, or in form of a vector, where starting points are
     read in consecutive order from the entries of the vector. 
     The starting point has always to be specified on the original data
-    scale, even if \code{scaled=TRUE}.  A fixed  number of starting
+    scale, even if \code{scaled>0}.  A fixed  number of starting
     points can be enforced through option \code{mult} in \code{lpc.control}.
    }
   
@@ -46,8 +44,7 @@ bandwidth. May be either specified as a single number, then the same bandwidth i
  	 "two": go from starting point in both directions.
        }
 \item{scaled}{
-if TRUE, scales each variable by dividing through its range (see also
-the Notes section below).
+if 1 (or \code{TRUE}), scales each variable by dividing through its range. If \code{scaled=2}, scaling is performed by dividing through the standard deviation (see also the Notes section below).
 }
  \item{weights}{a vector of observation weights (can also be used to exclude
  individual observations from the computation by setting their weight to
@@ -93,7 +90,7 @@ Additional parameters steering particularly the starting-, boundary-, and conver
  \item{data}{
     The data frame used for curve estimation.
   }
- \item{scaled}{Logical.} 
+ \item{scaled}{the user-supplied value, could be boolean or numerical} 
  \item{weights}{The vector of weights used for curve estimation.}
  \item{control}{The settings used in \code{lpc.control()}} 
  \item{Misc}{ Miscellannea.}
@@ -114,23 +111,14 @@ Additional parameters steering particularly the starting-, boundary-, and conver
   J. Einbeck and L. Evers.  See \code{\link{LPCM-package}} for further acknowledgements.
 }
 \note{
-All values provided in the output refer to the scaled data, if
-\code{scaled=TRUE}.  Use \code{\link{unscale}} to convert the
-results back to the original data scale. 
+
+All values provided in the output refer to the scaled data, unless \code{scaled=0} or (equivalently) \code{scaled=FALSE}. Use \code{\link{unscale}} to convert the results back to the original data scale. 
   
-The option \code{scaled=TRUE} scales the data by dividing each variable through their
-range. This differs from the usual scaling through
-the standard deviation as common for  PCA, but we found the
-algorithm and the default bandwidth selection to work more reliably
-this way. If you wish to scale by the standard deviation, please do that
-by feeding the scaled data directly into the \code{lpc}
-function, i.e.
+The default option \code{scaled=1} or  \code{scaled=TRUE}  scales the data by dividing each variable through their
+range (differing from the scaling through
+the standard deviation as common e.g. for  PCA).  The setting \code{scaled=2}, and in fact all other settings  \code{scaled>0}, will scale the data by their standard deviation.
 
-\code{lpc(sweep(data, 2,sd(data), "/"),h, t0, ..., scaled=FALSE, ...)}.
-
-
-
-
+If \code{scaled=1} or if no scaling is applied, then the default bandwidth setting is 10 percent of the data range in each direction. If the data are scaled through the standard deviation, then the default setting is 40 percent of the standard deviation in each direction. 
 }
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
@@ -145,13 +133,13 @@ lpc1 <- lpc(calspeedflow[,3:4])
 plot(lpc1)
 
 data(mussels, package="dr")
- lpc2 <- lpc(mussels[,-3], x0=as.numeric(mussels[49,-3]),scaled=FALSE)
+ lpc2 <- lpc(mussels[,-3], x0=as.numeric(mussels[49,-3]),scaled=0)
  plot(lpc2, curvecol=2)
 
 data(gaia)
 s <- sample(nrow(gaia),200)
 gaia.pc <-  princomp(gaia[s,5:20])
-lpc3 <- lpc(gaia.pc$scores[,c(2,1,3)],scaled=FALSE)
+lpc3 <- lpc(gaia.pc$scores[,c(2,1,3)],scaled=0)
 plot(lpc3, curvecol=2, type=c("curve","mass"))
 
 # Simulated letter 'E' with branched LPC
@@ -162,7 +150,7 @@ eex<-rnorm(100,0,0.1);  eey<-rnorm(100,0,0.1)
 ex1<-ex+sex; ey1<-ey+sey
 ex2<-ex+eex; ey2<-ey+eey
 e1<-cbind(ex1,ey1); e2<-cbind(ex2,ey2)
-lpc.e1 <- lpc(e1, h= c(0.1,0.1),  depth=2, scaled=FALSE)
+lpc.e1 <- lpc(e1, h= c(0.1,0.1),  depth=2, scaled=0)
 plot(lpc.e1, type=c("curve","mass", "start"))
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

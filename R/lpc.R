@@ -1,4 +1,4 @@
-lpc <- function(X,h, t0=mean(h),  x0=1,   way = "two", scaled=TRUE,  weights=1, pen=2,
+lpc <- function(X,h, t0=mean(h),  x0=1,   way = "two", scaled=1,  weights=1, pen=2,
               depth=1, control=lpc.control()){
   iter    <-  control$iter
   boundary <- control$boundary
@@ -19,14 +19,38 @@ lpc <- function(X,h, t0=mean(h),  x0=1,   way = "two", scaled=TRUE,  weights=1, 
  
   countb   <- 0                # counter for branches 17/07/2007
   Lambda   <- matrix(0,0,5)    # stores the parameters (lambda, countb) as well as  depth, order, and  initialization number of the corresponding branch.
-  s1       <- apply(Xi, 2, function(dat){ diff(range(dat))})  # range
-  if (missing(h)){ if (!scaled){h   <- s1/10} else {h<- 0.1}} # bandwidth by default: 10% of range
+  # s1       <- apply(Xi, 2, function(dat){ diff(range(dat))})  # range
+  
+  s1<-rep(1,d)
+  if (scaled==1){
+    s1       <- apply(X, 2, function(dat){ diff(range(dat))})  # range 
+  } else if (scaled > 0){
+    s1<- apply(X, 2, sd)
+  }  else if (scaled <0){
+    stop("Negative values for scaled not allowed.")
+  }
+  
+  # if (missing(h)){ if (!scaled){h   <- s1/10} else {h<- 0.1}} # bandwidth by default: 10% of range
+  
+  if (missing(h)){
+    if (!scaled){
+      h<- apply(X, 2, function(dat){ diff(range(dat))})/10
+    }  else if (scaled==1) { 
+      h<- 0.1
+    } else if (scaled >0) {
+      h<-0.4
+    }
+  } # bandwidth by default: 10% of range or 40% of standard deviation 
+  
   if (length(h)==1){h <- rep(h,d)}
+ 
   ms.h    <- if (!is.null(control$ms.h)){control$ms.h} else {h}
   ms.sub  <- control$ms.sub 
-  if (scaled){        # scales the data to lie by its range
+  
+   if (scaled >0 ){        # scales the data to lie by its range
         Xi <- sweep(Xi, 2, s1, "/")
-   } 
+  }
+  
   if (d==1){
       stop("Data set needs to consist of at least two variables!")
   } 
@@ -35,7 +59,7 @@ lpc <- function(X,h, t0=mean(h),  x0=1,   way = "two", scaled=TRUE,  weights=1, 
   if (length(x0)==1 && x0==1){
     
       n  <- sample(N,1);
-      x0 <- matrix(ms.rep(Xi, Xi[n,],ms.h, plotms=0)$final, nrow=1)
+      x0 <- matrix(ms.rep(Xi, Xi[n,],ms.h)$final, nrow=1)
       
    }  else if (length(x0)==1 && x0==0 ){
           if (N<= ms.sub) {
@@ -45,7 +69,7 @@ lpc <- function(X,h, t0=mean(h),  x0=1,   way = "two", scaled=TRUE,  weights=1, 
               #print(Nsub)
               sub <- sample(1:N, Nsub)
           }
-          x0<- ms(Xi, ms.h, subset=sub, plotms=0)$cluster.center
+          x0<- ms(Xi, ms.h, subset=sub, plot=FALSE)$cluster.center
    }  else {
         if (is.null(x0)){
              if (is.null(mult)){stop("One needs to allow for at least one starting point.")}
@@ -179,7 +203,7 @@ lpc <- function(X,h, t0=mean(h),  x0=1,   way = "two", scaled=TRUE,  weights=1, 
            scaled=list(scaled),
            weights=list(weights),
            control=list(control),
-           Misc=list(list( rho=curve0[[4]], scaled.by = if (scaled) s1 else rep(1,d), adaptive.band=curve0[[7]] , angles=curve0[[3]]))
+           Misc=list(list( rho=curve0[[4]], scaled.by = s1, adaptive.band=curve0[[7]] , angles=curve0[[3]]))
            ) 
    class(fit)<-"lpc"
    fit

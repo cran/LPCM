@@ -48,8 +48,9 @@ lpc1 <- lpc(calspeedflow[,3:4])
 print(lpc1)
 lpc2 <- lpc.spline(lpc1)
 print(lpc2)
-ms1<- ms(calspeedflow[,3:4], plot=FALSE)
-print(ms1)
+\dontrun{
+ms1<- ms(calspeedflow[,3:4], plot=FALSE) 
+print(ms1)}
 }
 
 %\keyword{ smooth}% at least one, from doc/KEYWORDS

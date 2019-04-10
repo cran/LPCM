@@ -1,5 +1,6 @@
 
 coverage.raw <-function(X, vec, tau, weights=1, plot.type="p", print=FALSE, label=NULL,...){
+  
      X<- as.matrix(X)
      p <- dim(vec)[1]
      n <- dim(X)[1]
@@ -43,9 +44,10 @@ coverage<-function(X, vec,  taumin=0.02, taumax,  gridsize=25, weights=1, plot.t
   if (missing(taumax)){
   m <-colMeans(X)
   Xm <- sweep(X, 1, m, "-")
-  Xs<- apply(X,1, sd)
+  Xs<- apply(X,2, sd)
   taumax<-max(Xs)
- }
+  }
+
  all.taus      <- seq(taumin, taumax, length=gridsize)
  all.coverages <- rep(0, gridsize)
 

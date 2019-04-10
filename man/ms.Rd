@@ -22,17 +22,17 @@ ms(X, h, subset,  thr=0.001, scaled= 1, iter=200, plot=TRUE, ...)
 }
 
 \arguments{
-  \item{X}{data matrix.}
+  \item{X}{data matrix or vector.}
   \item{h}{scalar or vector-valued bandwidth (by default, 5 percent of
   the  data range, or 20 percent of the standard deviation, respectively, in each direction). If set manually and \code{scaled>0}, this
   bandwidth needs to be set on the scaled scale; for instance setting
-  \code{scaled=1} and \code{h=0.10} will use a bandwidth of \eqn{10\%} of the data range in either direction. }
+  \code{scaled=1} and \code{h=0.10} will use a bandwidth of \eqn{10} percent of the data range in either direction. }
   \item{x}{point from which we wish to shift to the local mean.}
   \item{subset}{vector specifying a subset of 1:n, where n is the sample
   size. This allows to run the iterative mean shift procedure only
   from a subset of points (if unspecified, 1:n is used here,
   i.e. each data point serves as a starting point).} 
-\item{scaled}{if equal to 1, each variable is divided by its range, and if equal to 2 (or any other positive value other than 1), each variable is divided by its standard deviation.}
+\item{scaled}{if equal to 1 (default), each variable is divided by its range, and if equal to 2 (or any other positive value other than 1), each variable is divided by its standard deviation. If equal to 0, then no scaling is applied.}
    \item{thresh, iter}{mean shift iterations are stopped when the
   mean shift length (relative to the length of \code{x}) falls below
       \code{thresh}, or  after \code{iter} iterations (whatever event

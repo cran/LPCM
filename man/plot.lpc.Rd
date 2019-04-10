@@ -77,7 +77,8 @@ Einbeck, J., Evers, L. & Hinchliff, K. (2010):  Data compression and regression 
 data(calspeedflow)
 lpc1 <- lpc(calspeedflow[,3:4])
 plot(lpc1, type=c("spline","project"), lwd=2)
-ms1<- ms(calspeedflow[,3:4], plot=FALSE)
+ms1<- ms(calspeedflow[,3:4], subset=sample.int(444,100), plot=FALSE) 
+    # starts trajectories from 100 random obs'n
 plot(ms1, masscol=1)
 plot(ms1, curvecol="grey30")
 

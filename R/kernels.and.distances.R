@@ -57,7 +57,7 @@ vecdist <- function(X,Y){
 
 
 # computes the minimal distance between a vector and a set of vectors 
- mindist <- function(X, y){
+mindist <- function(X, y){
         d <- length(y)
         s <- sqrt(d) * distancevector(X, y)
         return(list(mindist = min(s), closest.item = order(s)[1]))
@@ -66,7 +66,8 @@ vecdist <- function(X,Y){
 
 # Univariate kernel
 kern <- function(y, x = 0, h = 1){
-    1/h * dnorm((x - y)/h)
+   # 1/h * dnorm((x - y)/h)
+   dnorm(y,x,h)
 }
 
 # Multivariate kernel 
@@ -74,18 +75,20 @@ kernd <- function(X,x,h){
    if (!is.matrix(X) && !is.data.frame(X)){ X<- matrix(X, nrow=1)}
    x<-as.numeric(x)
    d<-length(x)
+   if (length(h) == 1) {
+     h <- rep(h, d)
+   }
    k<-1
    for (j in 1:d){k<- k* kern(X[,j],x[j],h[j])}
    k
    }
 
-# Euclidian norm
+# Squared euclidian norm
 enorm <- function (x){
          sum(x^2)
      }
 
 # Multivariate kernel density estimator
-
 kdex <-  function(X, x, h){
           n<-dim(X)[1]
           1/n*sum(kernd(X,x,h))

@@ -4,7 +4,10 @@ Rc <- function(x, ...){
 
 
 base.Rc <-function(data,  closest.coords,   type="curve"){
-  
+
+  if(is.vector(data)){
+    data<-matrix(data,nrow=length(data))
+  }
   data <- as.matrix(data)
   if (missing(closest.coords)) {
             stop("closest.coords needs to be provided.")
@@ -13,10 +16,15 @@ base.Rc <-function(data,  closest.coords,   type="curve"){
        stop("The provided vector of fitted values is empty.")
   }   
   
+  
   n <- dim(data)[1]
   d <- dim(data)[2]
 
   # if weights argument copy in preamble here.
+  
+  if(is.vector(closest.coords)){
+    closest.coords<-matrix(closest.coords,nrow=length(closest.coords))
+  }
   
   all.dist <- vecdist(data, closest.coords)
   

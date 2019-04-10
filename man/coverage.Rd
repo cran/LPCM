@@ -145,10 +145,15 @@ J. Einbeck
 
 \examples{
 
+data(faithful)
+mfit <- ms(faithful)
+coverage(mfit$data, mfit$cluster.center, gridsize=18)
 
-data(calspeedflow)
-c.mfit <- ms(calspeedflow[,3:4])
-coverage(c.mfit$data, c.mfit$cluster.center, gridsize=20)
+\dontrun{
+f.self <- ms.self.coverage(faithful,gridsize= 50, taumin=0.1, taumax=0.5, plot.type="o")   
+h <- select.self.coverage(f.self)$select
+mfit2 <- ms(faithful,h=h[2]) # using `second-best' suggested bandwidth 
+}
 
 \dontrun{
 data(gvessel)
@@ -158,11 +163,6 @@ g.lfit <- lpc(gvessel[,c(2,4,5)], h=h[1],  x0=c(35, 1870, 6.3))
 lpc.coverage(g.lfit, gridsize=10, print=FALSE)
 }
 
-\dontrun{
-data(faithful)
-f.self <- ms.self.coverage(faithful,gridsize= 50, taumin=0.1, taumax=0.5, plot.type="o")   
-h <- select.self.coverage(f.self)$select
-f.mfit <- ms(faithful,h=h[2])} # using `second-best' suggested bandwidth 
 }
 
 % Add one or more standard keywords, see file 'KEYWORDS' in the

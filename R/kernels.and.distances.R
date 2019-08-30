@@ -83,9 +83,9 @@ kernd <- function(X,x,h){
    k
    }
 
-# Squared euclidian norm
+# Euclidian norm
 enorm <- function (x){
-         sum(x^2)
+         sqrt(sum(x^2))
      }
 
 # Multivariate kernel density estimator

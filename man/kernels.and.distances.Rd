@@ -40,7 +40,7 @@ enorm(x)
 \code{lpc} ; \code{kernd} is the corresponding multivariate product
 kernel.  \code{kdex} is a pointwise multivariate kernel density estimator.
   
-\code{distancevector} makes use of function \code{vdisseuclid} from \R package \pkg{hopach} (but that package does not need to be loaded).
+\code{distancevector} makes use of function \code{vdisseuclid} from \R package \pkg{hopach} (but that package does not need to be loaded). \code{enorm} is the Euclidean norm.
 }
 
 \references{

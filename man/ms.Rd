@@ -11,14 +11,12 @@ Mean shift clustering.
 Functions for mean shift, iterative mean shift,  and mean shift clustering.
 The main function is \code{ms} which, for a given bandwidth, detects the local modes 
 (`local principal points') and performs the clustering.
-
-These  functions implement the mean shift techniques presented in Einbeck (2011).
 }
 
 \usage{
 meanshift(X, x, h)
-ms.rep(X, x, h, thresh= 0.000001, iter=200)
-ms(X, h, subset,  thr=0.001, scaled= 1, iter=200, plot=TRUE, ...)
+ms.rep(X, x, h, thresh= 0.0001, iter=200)
+ms(X, h, subset,  thr=0.01, scaled= 1, iter=200, plot=TRUE, ...)
 }
 
 \arguments{
@@ -34,11 +32,11 @@ ms(X, h, subset,  thr=0.001, scaled= 1, iter=200, plot=TRUE, ...)
   i.e. each data point serves as a starting point).} 
 \item{scaled}{if equal to 1 (default), each variable is divided by its range, and if equal to 2 (or any other positive value other than 1), each variable is divided by its standard deviation. If equal to 0, then no scaling is applied.}
    \item{thresh, iter}{mean shift iterations are stopped when the
-  mean shift length (relative to the length of \code{x}) falls below
+  mean shift length (relative to the distance of of \code{x} to the overall mean; see Note section) falls below
       \code{thresh}, or  after \code{iter} iterations (whatever event
   happens first).} 
   \item{thr}{adjacent mean shift clusters are merged if their relative
-  distance falls below this threshold.}
+  distance falls below this threshold (see Note section).}
   \item{plot}{if equal to 0, then no plotted output. For bivariate
   data, \code{plot=1} gives by default a dynamically created color plot showing the mean
   shift trajectories and the resulting clustering.} 
@@ -56,7 +54,7 @@ ms(X, h, subset,  thr=0.001, scaled= 1, iter=200, plot=TRUE, ...)
 
 The concepts of coverage and self-coverage, which were originally
 introduced in the principal curve context, adapt straightforwardly to
-this setting.
+this setting (Einbeck, 2011).
 
 The goodness-of-fit messure \code{Rc} can also be  applied in this context. For
 instance, a value of \eqn{R_C=0.8}{R_C=0.8} means that,
@@ -104,6 +102,12 @@ All values provided in the output refer to the scaled data, unless \code{scaled=
 The default option \code{scaled=1} or  \code{scaled=TRUE}  scales the data by dividing each variable through their range (differing from the scaling through the standard deviation as common e.g. for  PCA).  All other settings  \code{scaled>0} will scale the data by their standard deviation.
 
 If \code{scaled=1} or if no scaling is applied, then the default bandwidth setting is 5 percent of the data range in each direction. If the data are scaled through the standard deviation, then the default setting is 20 percent of the standard deviation in each direction. 
+
+
+The threshold \code{thresh} for stopping mean shift iterations works as follows. At each iteration, we compare
+the length of the mean shift, that is the Euclidean distance between the point \code{x} and its local mean \code{m}, to the Euclidean distance between the point \code{x} and the overall data mean \code{M}. If this distance falls below \code{thresh}, the mean shift procedure is stopped.
+
+The threshold \code{thr} for merging cluster centers works as follows: After identification of a new cluster center, we compute the Euclidean distance of the new center to (each) existing center, relative to the Euclidean distance of the existing center to the overall mean. If this distance falls below \code{thr}, then the new center is deemed identical to the old one. The default setting for the relation of the two thresholds is \code{thresh = thr^2}.
 }
 
 %\section{Warning}{

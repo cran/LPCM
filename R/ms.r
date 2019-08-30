@@ -1,12 +1,5 @@
 meanshift<-function(X, x, h){
-  #gd <- function(Xi,x,h){# Multi-d profile
-  #  d<-length(x)
-  #  k<-1
-  #  for (j in 1:d){
-  #    k<- k* kern(Xi[,j],x[j],h[j])
-  #  }
-  #  k
-  #}
+  
   if(is.null(dim(X))){X<-as.vector(X)}
   if(is.vector(X)){
     X<-matrix(X,nrow=length(X))
@@ -27,24 +20,17 @@ meanshift<-function(X, x, h){
 
 
 # Mean shift iterative function (until convergence ...)
-ms.rep <- function (X, x, h, thresh= 0.000001, iter=200) {    
+ms.rep <- function (X, x, h, thresh= 0.0001, iter=200) {    
   s  <- 0
   th <- rep(0,iter)
   M  <-matrix(0, iter, length(x))
   x0 <- x
-  #if(is.null(dim(X))){X<-as.vector(X)}
-  #if(is.vector(X)){
-  #  X<-matrix(X,nrow=length(X))
-  #}
-   #d  <- dim(X)[2]
-  # if (length(h) == 1) {
-  #  h <- rep(h, d)
-  #}
+  Xm<-colMeans(X)
   
   for (j in 1: iter){           
     m     <- meanshift(X, x, h)        
     M[j,] <- m
-    th[j] <- sqrt(enorm(m-x))/sqrt(enorm(x))          
+    th[j] <- enorm(m-x)/enorm(Xm-x)          
     if (th[j]<thresh){
       s<-j;                 
       break
@@ -56,12 +42,13 @@ ms.rep <- function (X, x, h, thresh= 0.000001, iter=200) {
 
 # Mean shift clustering
 
-ms<-function (X, h, subset, thr = 0.001, scaled = 1, iter=200, plot = TRUE,  ...) 
+ms<-function (X, h, subset, thr = 0.01, scaled = 1, iter=200, plot = TRUE,  ...) 
 {
   if(is.null(dim(X))){X<-as.vector(X)}
   if(is.vector(X)){
     X<-matrix(X,nrow=length(X))
   }
+  
   n <- dim(X)[1]
   d <- dim(X)[2]
   
@@ -93,6 +80,7 @@ ms<-function (X, h, subset, thr = 0.001, scaled = 1, iter=200, plot = TRUE,  ...
   if (scaled >0){        # scales the data to lie by its range
     X <- sweep(X, 2, s1, "/")
   } 
+  Xm<-colMeans(X)
   
   if (plot && d ==2) {
     plot(X, col = "grey70", ...)
@@ -111,7 +99,7 @@ ms<-function (X, h, subset, thr = 0.001, scaled = 1, iter=200, plot = TRUE,  ...
     cluster.dist <- rep(0, ncluster)
     if (ncluster >= 1) {
       for (j in 1:ncluster) {
-        cluster.dist[j] <- sqrt(enorm(savecluster[j, ] - finals[i,]))/sqrt(enorm(savecluster[j, ]))
+        cluster.dist[j] <- enorm(savecluster[j, ] - finals[i,])/enorm(savecluster[j, ]- Xm)
       }
     }
     

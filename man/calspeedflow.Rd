@@ -3,7 +3,7 @@
 \alias{calspeedflow}
 \docType{data}
 \title{
-Speed-flow data from Calfornia. 
+Speed-flow data from California. 
 }
 \description{
 A `fundamental diagram' with observations of speed and flow recorded from 9th of July 2007, 9am, to 10th of July 2007, 10pm, on Line 5 of the Californian Freeway SR57-N, VDS number 1202263. The data were originally measured in intervals of thirty seconds, and then aggregated over intervals of 5 minutes length. 

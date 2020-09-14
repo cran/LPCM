@@ -40,7 +40,7 @@ relative difference of parameter values between two centers of mass
 falls below the given threshold.  If set to 0, then the curve will
 always stop after exactly \code{iter} iterations.
 }
- \item{mult}{ numerical value which enforeces a fixed number of starting points.  If the
+ \item{mult}{ numerical value which enforces a fixed number of starting points.  If the
     number  given here is larger than the number of starting points
     provided at \code{x0},  then the missing points will be set at
     random (For example, if \eqn{d=2}, \code{mult=3}, and
@@ -80,7 +80,7 @@ points. Usually, between 0.3 and 0.4 (see reference [1]).
 %%  ~~ If necessary, more details than the description above ~~
 %}
 \value{
-A list of the nine specified imput parameters, which can be read by the
+A list of the nine specified input parameters, which can be read by the
 \code{control} argument of the \code{lpc} function. 
 %%  ~Describe the value returned
 %%  If it is a LIST, use

@@ -93,7 +93,7 @@ Additional parameters steering particularly the starting-, boundary-, and conver
  \item{scaled}{the user-supplied value, could be boolean or numerical} 
  \item{weights}{The vector of weights used for curve estimation.}
  \item{control}{The settings used in \code{lpc.control()}} 
- \item{Misc}{ Miscellannea.}
+ \item{Misc}{ Miscellanea.}
  
 %%  ~Describe the value returned
 %%  If it is a LIST, use

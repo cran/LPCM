@@ -38,7 +38,7 @@ base.Rc(data,  closest.coords, type="curve")
 \details{
 \code{Rc} computes the coverage coefficient \eqn{R_C}{R_c}, a quantity which
 estimates the goodness-of-fit of a fitted principal object.   This
-quantity can be interpreted similar to the coeffient of determination in
+quantity can be interpreted similar to the coefficient of determination in
 regression analysis: Values close to 1 indicate a good fit, while values
 close to 0 indicate a `bad' fit (corresponding to linear PCA).
 
@@ -96,8 +96,10 @@ J. Einbeck.
 data(calspeedflow)
 lpc1 <- lpc.spline(lpc(calspeedflow[,3:4]), project=TRUE)
 Rc(lpc1)
+\dontrun{
 # is the same as:
 base.Rc(lpc1$lpcobject$data, lpc1$closest.coords)
+}
 
 \dontrun{
 ms1 <- ms(calspeedflow[,3:4], plot=FALSE)

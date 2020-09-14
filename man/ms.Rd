@@ -56,7 +56,7 @@ The concepts of coverage and self-coverage, which were originally
 introduced in the principal curve context, adapt straightforwardly to
 this setting (Einbeck, 2011).
 
-The goodness-of-fit messure \code{Rc} can also be  applied in this context. For
+The goodness-of-fit measure \code{Rc} can also be  applied in this context. For
 instance, a value of \eqn{R_C=0.8}{R_C=0.8} means that,
 after the clustering, the mean absolute residual length has been
 reduced by \eqn{80\%}{80\%} (compared to the distances to the overall mean).

@@ -11,7 +11,7 @@
 
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Auxilary  kernel and distance functions.}
+Auxiliary  kernel and distance functions.}
 \description{
  Internal  \pkg{LPCM} functions which are normally not to be called by the user.
 }

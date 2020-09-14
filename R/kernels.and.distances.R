@@ -72,7 +72,9 @@ kern <- function(y, x = 0, h = 1){
 
 # Multivariate kernel 
 kernd <- function(X,x,h){
-   if (!is.matrix(X) && !is.data.frame(X)){ X<- matrix(X, nrow=1)}
+   if (!is.matrix(X) && !is.data.frame(X)){ 
+      if (length(x)==1){X<- matrix(X, ncol=1)} else {X<- matrix(X, nrow=1)}
+     }  # changed 05/09/20
    x<-as.numeric(x)
    d<-length(x)
    if (length(h) == 1) {

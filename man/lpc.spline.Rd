@@ -6,7 +6,7 @@
 Representing local principal curves through a  cubic spline.
 }
 \description{
-Fis a natural cubic spline component-wise through the series of local centers of mass. This provides a continuous parametrization in terms of arc length distance, which can be used to compute a projection index for the original or new data points.
+Fits a natural cubic spline component-wise through the series of local centers of mass. This provides a continuous parametrization in terms of arc length distance, which can be used to compute a projection index for the original or new data points.
 }
 \usage{
 lpc.spline(lpcobject, optimize = TRUE, compute.Rc=FALSE,

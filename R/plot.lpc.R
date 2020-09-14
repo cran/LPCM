@@ -207,7 +207,15 @@ plot.ms <- function(x, unscale=FALSE, lwd=1, datcol="grey70",   datpch=21, massc
   
   if (missing(masspch)){masspch<-15}
   
-  if (d == 2) {
+  
+  if (d==1){ # added 04/09/20
+    s<- length(table(cluster.center))
+    hist(X,...)
+    for (j in 1:s){
+      rug(X[cluster.label==j], col=j+1, lwd=lwd)
+    }
+    points(cluster.center,rep(0,s), col=1+1:s, pch=masspch, cex=2)
+  } else  if (d == 2) {
     plot(as.matrix(X), col = datcol, pch=datpch,...)
     if (missing(masscol)){
       masscol<- 2:(dim(cluster.center)[1]+1)

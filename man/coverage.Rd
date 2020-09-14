@@ -12,7 +12,7 @@
 Coverage and self-coverage plots.
 }
 \description{
-These functions compute coverages and self-coverages, and produce corresponding plots, for any principal curve object.  The former may be used as goodness-of-fit measres, and the latter for for bandwidth selection.
+These functions compute coverages and self-coverages, and produce corresponding plots, for any principal curve object.  The former may be used as goodness-of-fit measures, and the latter for for bandwidth selection.
 }
 \usage{
 coverage.raw(X, vec, tau, weights=1, plot.type="p", print=FALSE,
@@ -28,7 +28,7 @@ lpc.self.coverage(X,  taumin=0.02, taumax=0.5,   gridsize=25, x0=1,
      way = "two", scaled=1,  weights=1, pen=2, depth=1,
      control=lpc.control(boundary=0, cross=FALSE),   quick=TRUE,
      plot.type="o", print=FALSE, ... )
-     
+ 
 ms.self.coverage(X, taumin=0.02, taumax=0.5, gridsize=25,
        thr=0.001, scaled=1, cluster=FALSE, plot.type="o", 
        print=FALSE, ...)
@@ -64,7 +64,7 @@ select.self.coverage(self,  smin, plot.type="o", plot.segments=NULL)
  \item{cluster}{if \code{TRUE}, distances are always measured to the
     cluster to which an observation is assigned, rather than to the
     nearest cluster.}
-\item{self}{An object of class \code{self}, or a matrix with two colums
+\item{self}{An object of class \code{self}, or a matrix with two columns
      providing a self-coverage curve.} 
  \item{smin}{Minimum coverage for bandwidth selection. Default: 1/3 for
    clustering, 2/3 for principal curves.}

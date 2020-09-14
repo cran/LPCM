@@ -12,29 +12,30 @@ Local principal curve methods
   with some additional functions for mean shift clustering.
 
    This package implements the techniques introduced in Einbeck, Tutz
-   & Evers (2005), and successive related papers.
+   & Evers (2005), Einbeck, Evers & Powell (2010) and Einbeck (2011).
 
    The main functions to be called by the user are
    \itemize{
    \item \code{\link{lpc}}, for the estimation of the local centers of mass
    which describe the principal curve;
-   \item \code{\link{lpc.spline}}, which is a smooth and fully parametrized
-   cubic spline respresentation of the latter; 
-   \item \code{\link{lpc.project}}, which enables to compress data by
-   projecting them orthogonally onto the curve; 
-   \item \code{\link{lpc.coverage}} and \code{\link{Rc}} for assessing
-   goodness-of-fit;
-   \item \code{\link{lpc.self.coverage}} for bandwidth selection;
-   \item the generic \code{plot} and \code{print} methods for objects
-   of class \code{lpc} and \code{lpc.spline}. 
+   \item \code{\link{ms}}, for calculation of mean shift trajectories and associated clusters.
+   %\item \code{\link{lpc.spline}}, which is a smooth and fully parametrized
+   %cubic spline representation of the latter; 
+   %\item \code{\link{lpc.project}}, which enables to compress data by
+   %projecting them orthogonally onto the curve; 
+   %\item \code{\link{lpc.coverage}} and \code{\link{Rc}} for assessing
+   %goodness-of-fit;
+   %\item \code{\link{lpc.self.coverage}} for bandwidth selection;
+   %\item the generic \code{plot} and \code{print} methods for objects
+   %of class \code{lpc} and \code{lpc.spline}. 
  }
+The package contains also specialized functions for projection and spline fitting (\code{\link{lpc.project}}, \code{\link{lpc.spline}}), functions for bandwidth selection (\code{\link{lpc.self.coverage}}, \code{\link{ms.self.coverage}}), goodness of fit assessment (\code{\link{Rc}}, \code{\link{coverage}}), as well as some methods for generic functions such as  \code{\link{print}} and \code{\link{plot}}. 
 
-This package also contains some code for density
-mode detection (`local principal points') and  mean shift clustering (as well as bandwidth
-selection in this context), which implements the methods presented in
-Einbeck (2011). See the help file for \code{\link{ms}} for details. These functionalities have been
-substantially improved with version 0.46-0.
-
+%This package also contains some code for density
+%mode detection (`local principal points') and  mean shift clustering (as well as bandwidth
+%selection in this context), which implements the methods presented in
+%Einbeck (2011). See the help file for \code{\link{ms}} for details. These functionalities have been
+%substantially improved with version 0.46-0.
 }
 \details{
 \tabular{ll}{

@@ -19,9 +19,9 @@ Takes an object of class \code{lpc}, \code{lpc.spline} or \code{ms}. In the case
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{x}{an object of class \code{lpc} or \code{lpc.spline}.   }
+  \item{x}{an object of class \code{lpc}, \code{lpc.spline}, or \code{ms}.   }
   \item{type}{a vector of type \code{c("mass", "spline",...)} with possible entries \code{mass, curve}, \code{spline, project, start.}}
-  \item{unscale}{if TRUE, then data (and all fitted componens) are scaled back to their original scale; otherwise the scaled data are plotted (only relevant if \code{scaled=TRUE}  in the fitted object). For \code{ms}, this is currently unimplemented.}  
+  \item{unscale}{if TRUE, then data (and all fitted components) are scaled back to their original scale; otherwise the scaled data are plotted (only relevant if \code{scaled=TRUE}  in the fitted object). For \code{ms}, this is currently unimplemented.}  
   \item{lwd}{width of principal curves or trajectories.}
   \item{datcol}{color of data points.}
   \item{datpch}{plotting symbol for data points.}
@@ -40,7 +40,9 @@ of starting points.}
 % Plots a local principal curve  
 %}
 \value{
-A 2D plot, 3D plot, or a pairs plot (depending on the type of object and the data dimension \eqn{d}.).
+A plot of adequate dimensionality (depending on the type of object). 
+
+For local principal curves, the minimum supported dimension is \eqn{d=2}, and for the mean shift it is \eqn{d=1}. In either case, the maximum supported dimension is \eqn{d=16}. With increasing dimension \eqn{d}, less plotting options tend to be supported. The nicest plots are obtained  for \eqn{d=2} and \eqn{d=3}.
 
 The most flexible plotting option is \code{masscol}. Depending on the
 length of the specified vector, this will be interpreted differently. If
@@ -50,13 +52,11 @@ will assign different colours to  different depths, or different branch
 numbers, or to individual data points, depending on the length. The
 default setting is assigning colours according to depth, in the order
 red, blue, black. 
- 
-With increasing dimension \eqn{d}, less plotting options tend to be supported. The nicest plots are obtained  for \eqn{d=2} and \eqn{d=3}.
  }
 
 
 \section{Warning}{
-This function computes all missing information (if posssible), so computation will take the longer the less informative the given object is, and the more advanced aspects are asked to plot!
+This function computes all missing information (if possible), so computation will take the longer the less informative the given object is, and the more advanced aspects are asked to plot!
 } 
 
 

@@ -1,7 +1,7 @@
 plot.lpc <- function(x, type, unscale=TRUE, lwd=1, datcol="grey60",   datpch=21, masscol=NULL, masspch=15, curvecol=1, splinecol=3, projectcol=4, startcol=NULL, startpch=NULL,...){
 
    object <- x
-   if (class(object)=="lpc.spline"){
+   if (inherits(object,"lpc.spline")){
        splineobject <- object
        lpcobject    <- object$lpcobject
    } else {
@@ -10,15 +10,15 @@ plot.lpc <- function(x, type, unscale=TRUE, lwd=1, datcol="grey60",   datpch=21,
    }
       
    if (missing(type)){
-     if (class(object)=="lpc"){type="curve"}
-     else if (class(object)=="lpc.spline" && object$project==FALSE){type="spline"}
-     else if (class(object)=="lpc.spline" && object$project){type=c("spline","project")}
+     if (inherits(object,"lpc")){type="curve"}
+     else if (inherits(object,"lpc.spline") && object$project==FALSE){type="spline"}
+     else if (inherits(object,"lpc.spline") && object$project){type=c("spline","project")}
    }                                                   
           
       
-   if ("project" %in% type  && class(object)=="lpc" || "project" %in% type &&  class(object)=="lpc.spline" && object$closest.branch=="none"  ){
+   if ("project" %in% type  && inherits(object,"lpc") || "project" %in% type &&  inherits(object,"lpc.spline") && object$closest.branch=="none"  ){
        splineobject <-    lpc.spline(lpcobject, project=TRUE)
-   } else if ("spline" %in% type  && class(object)=="lpc"){
+   } else if ("spline" %in% type  && inherits(object,"lpc")){
        splineobject <-    lpc.spline(lpcobject)
    }
         

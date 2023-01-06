@@ -70,6 +70,11 @@ These functions do currently not account for observation
 weights, i.e.  \eqn{R_C}{R_c} is computed through the unweighted mean
 reduction in absolute residual length (even if weights have been used for
 the curve fitting).  
+
+In the clustering context, a value of \eqn{R_C=0.8}{R_C=0.8} means that,
+after the clustering, the mean absolute residual length has been
+reduced by \eqn{80\%}{80\%} (compared to the distances to the overall mean).
+
 }
 
 \references{

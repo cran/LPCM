@@ -1,9 +1,15 @@
 ---
 title: "news"
 author: "Jochen Einbeck"
-date: "12/09/2020"
+date: "05/01/2023"
 output: html_document
 ---
+
+# LPCM 0.47-3
+
+## Major changes
+
+- Added function ms.rep.min for the computational of antimodes (experimental)
 
 # LPCM 0.46-6
 
@@ -15,4 +21,4 @@ output: html_document
 
 ## Major changes
 
-- [Record of changes and updates for version 0.46-3 and earlier](http://www.maths.dur.ac.uk/~dma0je/Software/LPCM/lpcversions.html) 
+- [Record of changes and updates for version 0.46-3 and earlier](https://www.maths.dur.ac.uk/users/jochen.einbeck/Software/LPCM/lpcversions.html) 

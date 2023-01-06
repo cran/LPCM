@@ -1,21 +1,15 @@
 \name{ms}
-\Rdversion{1.2}
 \alias{ms}
-\alias{meanshift}
-\alias{ms.rep}
+\Rdversion{1.2}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Mean shift clustering.
 }
 \description{
-Functions for mean shift, iterative mean shift,  and mean shift clustering.
-The main function is \code{ms} which, for a given bandwidth, detects the local modes 
-(`local principal points') and performs the clustering.
+Function for mean shift clustering, which, for a given bandwidth, detects the local modes and performs the clustering.
 }
 
 \usage{
-meanshift(X, x, h)
-ms.rep(X, x, h, thresh= 0.0001, iter=200)
 ms(X, h, subset,  thr=0.01, scaled= 1, iter=200, plot=TRUE, ...)
 }
 
@@ -23,20 +17,15 @@ ms(X, h, subset,  thr=0.01, scaled= 1, iter=200, plot=TRUE, ...)
   \item{X}{data matrix or vector.}
   \item{h}{scalar or vector-valued bandwidth (by default, 5 percent of
   the  data range, or 20 percent of the standard deviation, respectively, in each direction). If set manually and \code{scaled>0}, this
-  bandwidth needs to be set on the scaled scale; for instance setting
-  \code{scaled=1} and \code{h=0.10} will use a bandwidth of \eqn{10} percent of the data range in either direction. }
-  \item{x}{point from which we wish to shift to the local mean.}
+  bandwidth needs to be set on the scaled scale; for instance setting scale; for instance \code{scaled=1} and \code{h=0.10} will use a bandwidth of \eqn{10} percent of the  data range in either direction. }
   \item{subset}{vector specifying a subset of 1:n, where n is the sample
   size. This allows to run the iterative mean shift procedure only
   from a subset of points (if unspecified, 1:n is used here,
   i.e. each data point serves as a starting point).} 
-\item{scaled}{if equal to 1 (default), each variable is divided by its range, and if equal to 2 (or any other positive value other than 1), each variable is divided by its standard deviation. If equal to 0, then no scaling is applied.}
-   \item{thresh, iter}{mean shift iterations are stopped when the
-  mean shift length (relative to the distance of of \code{x} to the overall mean; see Note section) falls below
-      \code{thresh}, or  after \code{iter} iterations (whatever event
-  happens first).} 
   \item{thr}{adjacent mean shift clusters are merged if their relative
   distance falls below this threshold (see Note section).}
+ \item{scaled}{if equal to 1 (default), each variable is divided by its range, and if equal to 2 (or any other positive value other than 1), each variable is divided by its standard deviation. If equal to 0, then no scaling is applied.}
+   \item{iter}{maximum mean shift iterations (passed to \code{ms.rep}).}
   \item{plot}{if equal to 0, then no plotted output. For bivariate
   data, \code{plot=1} gives by default a dynamically created color plot showing the mean
   shift trajectories and the resulting clustering.} 
@@ -44,42 +33,31 @@ ms(X, h, subset,  thr=0.01, scaled= 1, iter=200, plot=TRUE, ...)
 }
 
 \details{
-  The methods implemented here can be used for density mode estimation,
-  clustering, and the selection of starting points for the LPC algorithm.
+The methods implemented here can be used for density mode estimation,
+clustering, and the selection of starting points for the LPC algorithm.
 
- Chen (1995) showed that, if the mean shift is computed iteratively, the
- resulting sequence of local means converges to a mode of the estimated
- density function.  By assigning each data point to the mode to which it
- has converged, this turns into a clustering technique.
-
-The concepts of coverage and self-coverage, which were originally
-introduced in the principal curve context, adapt straightforwardly to
-this setting (Einbeck, 2011).
-
-The goodness-of-fit measure \code{Rc} can also be  applied in this context. For
-instance, a value of \eqn{R_C=0.8}{R_C=0.8} means that,
-after the clustering, the mean absolute residual length has been
-reduced by \eqn{80\%}{80\%} (compared to the distances to the overall mean).
+It can be shown (Chen, 1995, Comaniciu & Meer, 2002, Li, 2005) that, if the mean shift is computed iteratively, the
+resulting sequence of local means converges to a mode of the estimated
+density function.  By assigning each data point to the mode to which it
+has converged, this turns into a clustering technique.
 }
 
 
 \value{
  
-  The main function \code{ms} produces an object of class \code{ms},
+  The function \code{ms} produces an object of class \code{ms},
   with components:
   
-   \item{cluster.center}{a matrix which gives the coordinates of the
+\item{cluster.center}{a matrix which gives the coordinates of the
   estimated density modes (i.e., of the mean-shift based cluster centers).}
-  \item{cluster.label}{assigns each data point to the cluster center to
+\item{cluster.label}{assigns each data point to the cluster center to
   which its mean shift trajectory has converged. }
-  \item{closest.label}{assigns each data point to the closest cluster
+\item{closest.label}{assigns each data point to the closest cluster
   center in terms of Euclidean distance.}
 \item{data}{the data frame (scaled if \code{scaled=TRUE}).}
 \item{scaled}{the user-supplied value, could be boolean or numerical.}
 \item{scaled.by}{the data were scaled by dividing each variable through
   the values provided in this vector.}
-
- For all other functions, use \code{names()}.
 }
 
 
@@ -87,9 +65,13 @@ reduced by \eqn{80\%}{80\%} (compared to the distances to the overall mean).
 Chen, Y. (1995).  Mean Shift, Mode Seeking, and Clustering. IEEE
 Transactions on Pattern Analysis and Machine Intelligence, 17, 790-799.
 
-Einbeck, J. (2011). Bandwidth selection for mean-shift based
-unsupervised learning techniques: a unified approach via
-self-coverage.  Journal of Pattern Recognition Research 6, 175-192. 
+Comaniciu, D. and Meer,P. (2002). Mean shift: a robust approach toward feature 
+space analysis, IEEE Transactions on Pattern Analysis and Machine Intelligence
+24, 603-619.
+
+Li, X,  Hu, Z, and Wu, F. (2007). A note on the convergence of the mean shift, Pattern
+  Recognition 40, 1756 - 1762.
+
 }
 
 \author{
@@ -103,11 +85,12 @@ The default option \code{scaled=1} or  \code{scaled=TRUE}  scales the data by di
 
 If \code{scaled=1} or if no scaling is applied, then the default bandwidth setting is 5 percent of the data range in each direction. If the data are scaled through the standard deviation, then the default setting is 20 percent of the standard deviation in each direction. 
 
+The threshold \code{thr} for merging cluster centers works as follows: After identification of a new cluster center, we compute the Euclidean distance of the new center to (each) existing center, relative to the Euclidean distance of the existing center to the overall mean. If this distance falls below \code{thr}, then the new center is deemed identical to the old one.
 
-The threshold \code{thresh} for stopping mean shift iterations works as follows. At each iteration, we compare
-the length of the mean shift, that is the Euclidean distance between the point \code{x} and its local mean \code{m}, to the Euclidean distance between the point \code{x} and the overall data mean \code{M}. If this distance falls below \code{thresh}, the mean shift procedure is stopped.
-
-The threshold \code{thr} for merging cluster centers works as follows: After identification of a new cluster center, we compute the Euclidean distance of the new center to (each) existing center, relative to the Euclidean distance of the existing center to the overall mean. If this distance falls below \code{thr}, then the new center is deemed identical to the old one. The default setting for the relation of the two thresholds is \code{thresh = thr^2}.
+The goodness-of-fit measure \code{Rc} can also be  applied in this context. For
+instance, a value of \eqn{R_C=0.8}{R_C=0.8} means that,
+after the clustering, the mean absolute residual length has been
+reduced by \eqn{80\%}{80\%} (compared to the distances to the overall mean).
 }
 
 %\section{Warning}{
@@ -116,7 +99,7 @@ The threshold \code{thr} for merging cluster centers works as follows: After ide
 
 
 \seealso{
-\code{\link{Rc}}, \code{\link{plot.ms}}
+\code{\link{ms.rep}}, \code{\link{Rc}}, \code{\link{plot.ms}}
 }
 
 \examples{

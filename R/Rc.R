@@ -70,11 +70,11 @@ Rc.ms <- function(x,...){
 
 Rc.lpc <- function(x,...){
   object<- x
-  if (class(object)=="lpc"){
+  if (inherits(object,"lpc")){
      data <-object$data
      closest.coords <- lpc.spline(object, project=TRUE)$closest.coords
      # weights <- object$weights
-  } else if (class(object)=="lpc.spline"){
+  } else if (inherits(object,"lpc.spline")){
      # weights <-object$lpcobject$weights
      if (object$Rc=="none"){
         data <- object$lpcobject$data

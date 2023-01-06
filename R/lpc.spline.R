@@ -1,7 +1,7 @@
 
 
 lpc.spline <- function(lpcobject, optimize=TRUE, compute.Rc=FALSE,  project=FALSE, ...){
-  if (class(lpcobject)=="lpc.spline"){
+  if (inherits(lpcobject,"lpc.spline")){
      lpcobject <-lpcobject$lpcobject
   }   
   lpcsl    <- suppressWarnings(lpc.splinefun(lpcobject))

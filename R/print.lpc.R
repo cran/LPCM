@@ -8,7 +8,7 @@ print.lpc <-
       cat("Type plot(", sx, ") to see a graphical display of the fitted object. \n\n")
       cat("Type names(", sx, ") to see an overview of items available. \n\n")
               
-      if(class(x)=="lpc"){
+      if(inherits(x,"lpc")){
          if (x$scaled){
              cat("The data have been scaled by dividing through \n")
              cat(x$Misc$scaled.by)
@@ -17,7 +17,7 @@ print.lpc <-
            cat("The data have not been scaled. \n")
          }
        }
-     else if(class(x)=="lpc.spline"){
+     else if(inherits(x,"lpc.spline")){
         cat("A cubic spline with ", dim(x$knots.coords[[1]])[2], " knots and total arc length ", diff(range(x$knots.pi[[1]])), " has been laid through the  local centers of mass representing the local principal curve. \n") 
      }
       
@@ -37,7 +37,7 @@ print.ms <-
     cat("Type plot(", sx, ") to see a graphical display of the fitted object. \n\n")
     cat("Type names(", sx, ") to see an overview of items available. \n\n")
     
-    if(class(x)=="ms"){
+    if(inherits(x,"ms")){
       if (x$scaled){
         cat("The data have been scaled by dividing through \n")
         cat(x$scaled.by)

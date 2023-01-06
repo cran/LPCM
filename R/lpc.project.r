@@ -1,5 +1,5 @@
 lpc.project <- function(object, newdata, ...){
-  if (class(object)=="lpc"){
+  if (inherits(object,"lpc")){
        lpcobject  <- object
        lpcsl  <- lpc.splinefun(lpcobject)
    } else {

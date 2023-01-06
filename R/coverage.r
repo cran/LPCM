@@ -64,7 +64,7 @@ coverage<-function(X, vec,  taumin=0.02, taumax,  gridsize=25, weights=1, plot.t
 
 lpc.coverage<-function(object, taumin=0.02, taumax, gridsize=25,  quick=TRUE, plot.type="o", print=FALSE, ...){
  
- if (class(object)=="lpc"){
+ if (inherits(object,"lpc")){
    X <-object$data
    scaled<-object$scaled
    weights <- object$weights
@@ -73,7 +73,7 @@ lpc.coverage<-function(object, taumin=0.02, taumax, gridsize=25,  quick=TRUE, pl
    } else {
        lpc.vec<-lpc.spline(object, project=TRUE)$closest.coords
    }
- } else if (class(object)=="lpc.spline"){
+ } else if (inherits(object,"lpc.spline")){
     X <-object$lpcobject$data
     scaled <- object$lpcobject$scaled
     weights <- object$lpcobject$weights
@@ -264,14 +264,14 @@ ms.self.coverage <-
 select.self.coverage <-
 function (self,  smin, plot.type = "o", plot.segments=NULL) 
 {
-    if (class(self) == "self") {
+    if (inherits(self, "self")) {
         cover <- self$self.coverage.curve
     }
     else {
         cover <- self
     }
     if (missing(smin)) {
-        if (class(self) == "self") {
+        if (inherits(self, "self")) {
             smin <- switch(self$type, lpc = 2/3, ms = 1/3)
         }
         else stop("Please specify `smin' argument.")

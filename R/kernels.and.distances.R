@@ -92,6 +92,10 @@ enorm <- function (x){
 
 # Multivariate kernel density estimator
 kdex <-  function(X, x, h){
-          n<-dim(X)[1]
-          1/n*sum(kernd(X,x,h))
-        }
+      if(is.null(dim(X))){X<-as.vector(X)}
+      if(is.vector(X)){
+          X<-matrix(X,nrow=length(X))
+      }
+      n<-dim(X)[1]
+      1/n*sum(kernd(X,x,h))
+}

@@ -20,10 +20,10 @@ unscale.ms <- function(x,...){
 
 unscale.lpc <-function(x,...){
 
-     if (class(x)=="lpc"){ lpcobject<-x
+     if (inherits(x,"lpc")){ lpcobject<-x
                            splineobject<-NULL
                                 }
-     if (class(x)=="lpc.spline"){
+     if (inherits(x,"lpc.spline")){
                                 lpcobject   <- x$lpcobject
                                 splineobject<-x
                               }

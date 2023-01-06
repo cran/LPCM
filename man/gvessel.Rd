@@ -23,7 +23,7 @@ These are observations taken over nine days in May 2000 by the German vessel Gau
 %\details{
 %}
 \source{
-Retrieved by B. Powell from the World Ocean Database, \url{http://www.nodc.noaa.gov/OC5/WOD/pr_wod.html}.
+Retrieved by B. Powell from the World Ocean Database.
 }
 \references{
 Einbeck, J., Evers, L., and Powell, B. (2010): Data compression and regression through local principal curves and surfaces, International Journal of Neural Systems, 20, 177-192.

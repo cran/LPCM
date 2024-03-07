@@ -101,12 +101,12 @@ J. Einbeck.
 data(calspeedflow)
 lpc1 <- lpc.spline(lpc(calspeedflow[,3:4]), project=TRUE)
 Rc(lpc1)
-\dontrun{
+\donttest{
 # is the same as:
 base.Rc(lpc1$lpcobject$data, lpc1$closest.coords)
 }
 
-\dontrun{
+\donttest{
 ms1 <- ms(calspeedflow[,3:4], plot=FALSE)
 Rc(ms1)
 # is the same as:

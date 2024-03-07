@@ -100,7 +100,7 @@ lpc <- function(X,h, t0=mean(h),  x0=1,   way = "two", scaled=1,  weights=1, pen
     
      xo           <- x0[j,]                       # defines appropriate starting point for the jth curve
      X1[j,]       <- xo                           # adds starting point to list  
-     curve0       <-  followx(Xi, xo, h, t0, iter, way, weights, pen, phi =1, 0,rho0,  boundary, convergence.at,  cross ) # computes LPC of depth 1
+     curve0       <-  followx(Xi, xo, h, t0, iter, way, weights, pen, lasteigenvector =  0,rho0=rho0,  boundary, convergence.at,  cross ) # computes LPC of depth 1
      saveall      <- rbind(saveall,curve0[[1]])	  # stores LPC
      l            <- dim(curve0[[5]])[1]	  # number of candidates for junctions
      Lambda       <- rbind(Lambda, cbind(curve0[[6]], countb,1,1,j))
@@ -123,7 +123,7 @@ lpc <- function(X,h, t0=mean(h),  x0=1,   way = "two", scaled=1,  weights=1, pen
              X2     <- rbind(X2, t(new.x))				# adds new starting point to list          
              x      <- new.x
              jweights<-  1-kernd(Xi, c.x, h)/ kernd(c.x,c.x,h)
-             curve1 <- followx(Xi, x, h, t0, iter, way ="one", weights*jweights, pen,  phi=2, lasteigenvector= eigen.vecd, rho0, boundary,convergence.at,  cross)
+             curve1 <- followx(Xi, x, h, t0, iter, way ="one", weights*jweights, pen,  lasteigenvector= eigen.vecd, rho0=rho0, boundary,convergence.at,  cross)
              saveall<- rbind(saveall, curve1[[1]])    # stores LPC
              S2     <- rbind(S2,curve1[[5]])          # stores candidates for further junctions
              Lambda <- rbind(Lambda, cbind(curve1[[6]], countb, 2, 2,j))
@@ -135,7 +135,7 @@ lpc <- function(X,h, t0=mean(h),  x0=1,   way = "two", scaled=1,  weights=1, pen
              X2     <- rbind(X2, t(new.x))
              x      <- new.x
              jweights<-  1-kernd(Xi, c.x, h)/ kernd(c.x,c.x,h)
-             curve1 <- followx(Xi, x, h, t0, iter, way="back", weights*jweights, pen, phi=2, lasteigenvector=-eigen.vecd, rho0,boundary, convergence.at,  cross)
+             curve1 <- followx(Xi, x, h, t0, iter, way="back", weights*jweights, pen,  lasteigenvector=-eigen.vecd, rho0=rho0,boundary, convergence.at,  cross)
              saveall<- rbind(saveall, curve1[[1]])
              S2     <- rbind(S2, curve1[[5]])
              Lambda <- rbind(Lambda, cbind(curve1[[6]], countb, 2,2,j))
@@ -159,7 +159,7 @@ lpc <- function(X,h, t0=mean(h),  x0=1,   way = "two", scaled=1,  weights=1, pen
                   X3      <- rbind(X3, t(new.x))
                   x       <- new.x
                   jweights<-  1-kernd(Xi, c.x, h)/ kernd(c.x,c.x,h)
-                  curve1  <- followx(Xi, x , h, t0, iter, way ="one", weights*jweights, pen, phi=3, lasteigenvector= eigen.vecd, rho0, boundary, convergence.at, cross)
+                  curve1  <- followx(Xi, x , h, t0, iter, way ="one", weights*jweights, pen,  lasteigenvector= eigen.vecd, rho0=rho0, boundary, convergence.at, cross)
                   saveall <- rbind(saveall, curve1[[1]])
                   S3      <- rbind(S3,curve1[[5]])
                   Lambda <- rbind(Lambda, cbind(curve1[[6]], countb, 3,2,j))
@@ -171,7 +171,7 @@ lpc <- function(X,h, t0=mean(h),  x0=1,   way = "two", scaled=1,  weights=1, pen
                   X3     <- rbind(X3, t(new.x))
                   x      <- new.x
                   jweights<-  1-kernd(Xi, c.x, h)/ kernd(c.x,c.x,h)
-                  curve1 <- followx(Xi, x, h, t0, iter, way="back", weights*jweights, pen, phi=3, lasteigenvector=-eigen.vecd, rho0, boundary, convergence.at, cross)
+                  curve1 <- followx(Xi, x, h, t0, iter, way="back", weights*jweights, pen, lasteigenvector=-eigen.vecd, rho0=rho0, boundary, convergence.at, cross)
                   saveall<- rbind(saveall, curve1[[1]])
                   S3     <- rbind(S3,curve1[[5]])
                   Lambda <- rbind(Lambda, cbind(curve1[[6]], countb, 3,2,j))

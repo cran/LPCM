@@ -61,6 +61,9 @@ This function computes all missing information (if possible), so computation wil
 
 
 \references{
+
+Almeijeiras-Alonso, J. and Einbeck, J. (2023). A fresh look at mean-shift based modal clustering, Advances in Data Analysis and Classification, doi:10.1007/s11634-023-00575-1.
+
 Einbeck, J., Tutz, G.,  and Evers, L. (2005). Local principal curves. Statistics and Computing 15, 301-313.
 
 Einbeck, J., Evers, L. & Hinchliff, K. (2010):  Data compression and regression based on local principal curves. In A. Fink, B. Lausen, W. Seidel, and A. Ultsch (Eds),  Advances in Data Analysis, Data Handling, and Business Intelligence, Heidelberg, pp. 701--712, Springer. 

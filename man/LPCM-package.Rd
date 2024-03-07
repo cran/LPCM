@@ -12,7 +12,7 @@ Local principal curve methods
   with some additional functions for mean shift clustering.
 
    This package implements the techniques introduced in Einbeck, Tutz
-   & Evers (2005), Einbeck, Evers & Powell (2010) and Einbeck (2011).
+   & Evers (2005), Einbeck, Evers & Powell (2010), Einbeck (2011), Almeijeiras-Alonso and Einbeck (2023).
 
    The main functions to be called by the user are
    \itemize{
@@ -64,12 +64,13 @@ Maintainer: Jochen Einbeck <jochen.einbeck@durham.ac.uk>
 \references{
 Einbeck, J., Tutz, G., & Evers, L. (2005): Local principal curves, Statistics and Computing 15, 301-313.
 
-Einbeck, J., Evers, L., & Powell, B. (2010): Data compression and regression through local principal curves and surfaces, International Journal of Neural Systems, 
-20, 177-192.
+Einbeck, J., Evers, L., & Powell, B. (2010): Data compression and regression through local principal curves and surfaces, International Journal of Neural Systems 20, 177-192.
 
 Einbeck, J. (2011): Bandwidth selection for nonparametric unsupervised
 learning techniques -- a unified approach via self-coverage. Journal of
 Pattern Recognition Research 6, 175-192. 
+
+Almeijeiras-Alonso, J. and Einbeck, J. (2023). A fresh look at mean-shift based modal clustering, Advances in Data Analysis and Classification, doi:10.1007/s11634-023-00575-1.
 }
 \keyword{smooth}
 \keyword{multivariate}

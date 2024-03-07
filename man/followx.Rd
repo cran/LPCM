@@ -9,54 +9,56 @@ Fit an individual branch of a local principal curve.
 Internal function of package \pkg{LPCM} called by \code{lpc}. Do not use! 
 }
 \usage{
-followx(Xi, x0, h, t0, iter, way, weights, pen = 2, phi = 1,
+followx(Xi, x0, h, t0, iter, way, weights, pen = 2, 
     lasteigenvector = 0, rho0 = 0.4, boundary=0.005,
     convergence.at= 0.000001, cross=TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{Xi}{
-%%     ~~Describe \code{Xi} here~~
+data matrix
 }
   \item{x0}{
-%%     ~~Describe \code{x0} here~~
+branch starting point
 }
   \item{h}{
-%%     ~~Describe \code{h} here~~
+bandwidth
 }
   \item{t0}{
-%%     ~~Describe \code{t0} here~~
+step length
 }
   \item{iter}{
-%%     ~~Describe \code{iter} here~~
+number of iterations (within the given curve branch)
 }
   \item{way}{
-%%     ~~Describe \code{way} here~~
+possible values "one", "two", "back" (in which directions the curve should proceed)
 }
   \item{weights}{
+  vector of weights
 }
   \item{pen}{
-%%     ~~Describe \code{pen} here~~
+power used for angle penalization
 }
-  \item{phi}{
-%%     ~~Describe \code{phi} here~~
-}
-  \item{lasteigenvector}{
-%%     ~~Describe \code{lasteigenvector} here~~
+\item{lasteigenvector}{
+to be passed on from \code{lpc}
 }
   \item{rho0}{
-%%     ~~Describe \code{rho0} here~~
+constant; see reference [1] in \code{\link{lpc.control}}.
 }
   \item{boundary}{
-%%     ~~Describe \code{plotlpc} here~~
+boundary correction, see Einbeck and Zayed (2014)
 }
   \item{convergence.at}{
-%%     ~~Describe \code{plotlpc} here~~
+convergence parameter
 }
   \item{cross}{
-%%     ~~Describe \code{plotlpc} here~~
+Boolean; are curves allowed to cross?
 }
 
+}
+
+\references{
+Einbeck, J., & Zayed, M. (2014). Some asymptotics for localized principal components and curves. Communications in Statistics - Theory and Methods, 43(8), 1736-1749. doi: 10.1080/03610926.2012.673676
 }
 
 \author{
@@ -68,6 +70,8 @@ JE
 \seealso{
  \code{\link{lpc}}
 }
+
+
 
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

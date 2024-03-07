@@ -147,15 +147,15 @@ J. Einbeck
 
 data(faithful)
 mfit <- ms(faithful)
-coverage(mfit$data, mfit$cluster.center, gridsize=18)
+coverage(mfit$data, mfit$cluster.center, gridsize=16)
 
-\dontrun{
+\donttest{
 f.self <- ms.self.coverage(faithful,gridsize= 50, taumin=0.1, taumax=0.5, plot.type="o")   
 h <- select.self.coverage(f.self)$select
 mfit2 <- ms(faithful,h=h[2]) # using `second-best' suggested bandwidth 
 }
 
-\dontrun{
+\donttest{
 data(gvessel)
 g.self <-lpc.self.coverage(gvessel[,c(2,4,5)], x0=c(35, 1870, 6.3), print=FALSE, plot.type=0)
 h <- select.self.coverage(g.self)$select

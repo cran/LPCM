@@ -9,8 +9,8 @@
 
 This package can be used for fitting multivariate data patterns with
 local principal curves, including tools for data compression
-(projection) and measuring goodness-of-fit; with some additional
-functions for mean shift clustering.
+(projection) and measuring goodness-of-fit; with additional
+functionalities for mean shift clustering.
 
 ``` r
 library(LPCM)

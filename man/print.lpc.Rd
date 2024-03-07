@@ -48,7 +48,7 @@ lpc1 <- lpc(calspeedflow[,3:4])
 print(lpc1)
 lpc2 <- lpc.spline(lpc1)
 print(lpc2)
-\dontrun{
+\donttest{
 ms1<- ms(calspeedflow[,3:4], plot=FALSE) 
 print(ms1)}
 }

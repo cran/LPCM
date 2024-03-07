@@ -5,11 +5,17 @@ date: "05/01/2023"
 output: html_document
 ---
 
+# LPCM 0.47-4
+
+## Minor changes
+
+- Fixed some minor Notes appearing on CRAN Package Check Results.
+
 # LPCM 0.47-3
 
 ## Major changes
 
-- Added function ms.rep.min for the computational of antimodes (experimental)
+- Added function ms.rep.min for the computation of antimodes (experimental)
 
 # LPCM 0.46-6
 

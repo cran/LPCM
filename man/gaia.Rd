@@ -63,7 +63,7 @@ s <- sample(nrow(gaia),200)
 library(lattice)
 splom(gaia[s,5:20], cex=0.3, pscales=0)
 
-\dontrun{
+\donttest{
 gaia.pc <-  princomp(gaia[s,5:20])
 temp <- gaia$temperature
 tempcol     <- (temp[s]- min(temp[s]))/max(temp[s]- min(temp[s]))

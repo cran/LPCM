@@ -1,5 +1,5 @@
 
-followx<-function(Xi, x0, h, t0, iter, way,  weights, pen=2,  phi =1, lasteigenvector=0, rho0=0.4, boundary=0.005, convergence.at= 0.000001, cross=TRUE){
+followx<-function(Xi, x0, h, t0, iter, way,  weights, pen=2, lasteigenvector=0, rho0=0.4, boundary=0.005, convergence.at= 0.000001, cross=TRUE){
 
    N  <- dim(Xi)[1]
    d  <- dim(Xi)[2]

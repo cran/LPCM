@@ -58,7 +58,7 @@ Boolean; are curves allowed to cross?
 }
 
 \references{
-Einbeck, J., & Zayed, M. (2014). Some asymptotics for localized principal components and curves. Communications in Statistics - Theory and Methods, 43(8), 1736-1749. doi: 10.1080/03610926.2012.673676
+Einbeck, J., & Zayed, M. (2014). Some asymptotics for localized principal components and curves. Communications in Statistics - Theory and Methods, 43(8), 1736-1749. \doi{10.1080/03610926.2012.673676}
 }
 
 \author{

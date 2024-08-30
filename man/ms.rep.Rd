@@ -21,16 +21,17 @@ ms.rep.min(X, x, h, thresh=0.000001, iter=200, adjust.convergence=FALSE, verbose
   \item{X}{data matrix or vector.}
   \item{x}{point from which we wish to shift to the local mean.}
   \item{h}{scalar or vector-valued bandwidth; see also description in \code{\link{ms}}.}
-   \item{thresh, iter}{mean shift iterations are stopped when the
+  \item{thresh, iter}{mean shift iterations are stopped when the
   mean shift length (relative to the distance of of \code{x} to the overall mean; see Note section) falls below \code{thresh}, or  after \code{iter} iterations (whatever event happens first).} 
-\item{adjust.convergence}{Unimplemented. See also Notes section below.}  
+\item{adjust.convergence}{Only required for estimation of antimodes via \code{ms.rep.min}. See also Note section below.}  
 \item{verbose}{Allows or suppresses text output messages.} 
 }
 
 \details{
 The function \code{meanshift} computes a single mean shift iteration, and \code{ms.rep} computes an iterative series of mean shift iterations. Both of these functions are rarely used on their own, but are typically called by the overarching function \code{\link{ms}}.
 
-The function \code{ms.rep.min} is an experimental function for the computation of antimodes based on an inverse version of the mean shift procedure. This function has only be tested for one-dimensional data (Ameijeiras-Alonso and Einbeck, 202x). It may or may not produce a result for higher data dimensions, but the methodology has not been properly investigated for this case, i.e. any result obtained could be something different to an antimode.
+The function \code{ms.rep.min} implements an inverse version of the mean shift procedure which can be used for the computation of antimodes (minima of the density). The methodology has been presented in the univariate setting  in Ameijeiras-Alonso and Einbeck (2023). The function has been tested to a moderate extent in two dimensions, and it can be expected to work here. It has not been tested for higher dimensions. That is, for data of dimension 3 or higher, the function may or may not produce a result which may or may not correspond to an antimode. 
+
 }
 
 
@@ -48,23 +49,24 @@ The functions \code{ms.rep} and \code{ms.rep.min} produce a list with the follow
 
 
 \references{
-Ameijeiras-Alonso, J. and Einbeck, J. (202x). A fresh look at mean-shift based modal
-clustering. Under submission.
-
+Ameijeiras-Alonso, J. and Einbeck, J. (2023). A fresh look at mean-shift based modal
+clustering. Advances in Data Analysis and Classification, \doi{10.1007/s11634-023-00575-1}.
 }
 
 \author{
   J. Einbeck. See \code{\link{LPCM-package}} for further
   acknowledgements. 
 }
+
 \note{
 The threshold \code{thresh} for stopping mean shift iterations works as follows. At each iteration, we compare
-the length of the mean shift, that is the Euclidean distance between the point \code{x} and its local mean \code{m}, to the Euclidean distance between the point \code{x} and the overall data mean \code{M}. If this distance falls below \code{thresh}, the mean shift procedure is stopped.
+the length of the mean shift, that is the Euclidean distance between the point \code{x} and its local mean \code{m}, to the Euclidean distance between the point \code{x} and the overall data mean. If this distance falls below \code{thresh}, the mean shift procedure is stopped.
 
 When \code{ms.rep} is called by function \code{ms},  the relation of the thresholds \code{thr} and \code{thresh} is \code{thresh = thr^2}.
 
-Convergence of inverse mean shift algorithm is not mathematically guaranteed. Of course, no antimode will be found if there is none (i.e., if the value \code{x} is not situated between two modes), in which case the method will return a NA.
-But the algorithm may also fail to converge if the antimode is associated with a very small density value, which however rarely happens in practice unless the two distributions are fully separated. In this case the inverse mean shift algorithm will oscillate around the antimode, and the mean of these oscillating values (available from the function output) could give a suitable estimate of the antimode. Such adjustments are not yet implemented in an automated form in the present version of \pkg{LPCM}; so any estimate given in the output is the `plain' estimate (whether it exists or not). 
+Convergence of the inverse mean shift algorithm is not mathematically guaranteed. Of course, no antimode will be found if there is none (i.e., if the value \code{x} is not situated between two modes), in which case the method will return a NA.
+But the algorithm may also fail to converge if the antimode is associated with a very small density value, which however rarely happens in practice unless the two distributions are fully separated. In this case the inverse mean shift algorithm will oscillate around the antimode. By reducing the step length successively once  that such a situation is identified,  convergence can still be ensured algorithmically. This adjustment is activated if the
+ option \code{check.convergence} is set equal to \code{TRUE}.  This functionality is experimental, and details are to be reported elsewhere.
 }
 
 %\section{Warning}{

@@ -34,7 +34,7 @@ ms(X, h, subset,  thr=0.01, scaled= 1, iter=200, plot=TRUE, ...)
 
 \details{
 The methods implemented here can be used for density mode estimation,
-clustering, and the selection of starting points for the LPC algorithm. They are based on Almeijeiras-Alonso and Einbeck (2023).
+clustering, and the selection of starting points for the LPC algorithm. They are based on Ameijeiras-Alonso and Einbeck (2023).
 
 It can be shown (Chen, 1995, Comaniciu & Meer, 2002, Li, 2005) that, if the mean shift is computed iteratively, the
 resulting sequence of local means converges to a mode of the estimated
@@ -63,7 +63,7 @@ has converged, this turns into a clustering technique.
 
 \references{
 
-Almeijeiras-Alonso, J. and Einbeck, J. (2023). A fresh look at mean-shift based modal clustering, Advances in Data Analysis and Classification, doi:10.1007/s11634-023-00575-1.
+Ameijeiras-Alonso, J. and Einbeck, J. (2023). A fresh look at mean-shift based modal clustering, Advances in Data Analysis and Classification, \doi{10.1007/s11634-023-00575-1}.
 
 Chen, Y. (1995).  Mean Shift, Mode Seeking, and Clustering. IEEE
 Transactions on Pattern Analysis and Machine Intelligence, 17, 790-799.

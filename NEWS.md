@@ -5,6 +5,14 @@ date: "05/01/2023"
 output: html_document
 ---
 
+# LPCM 0.47-6
+
+## Minor changes
+
+- Function ms.rep.min now features an (experimental and optional) adjustment to 
+ deal with non-convergence. Some other minor CRAN-related fixes.
+
+
 # LPCM 0.47-4
 
 ## Minor changes
